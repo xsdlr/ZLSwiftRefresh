@@ -1,4 +1,6 @@
 # ZLSwiftRefresh
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/screenshot.gif)
+
 This is Swift version pull Refresh code.
 -------
 ## Use
