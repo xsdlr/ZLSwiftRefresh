@@ -109,7 +109,7 @@ extension UIScrollView: UIScrollViewDelegate {
             // 上啦加载更多
             var nowContentOffsetY:CGFloat = scrollView.contentOffset.y + self.frame.size.height
             var tableViewMaxHeight:CGFloat = CGRectGetMidY(tempTableView.tableFooterView!.frame)
-            if (nowContentOffsetY - tableViewMaxHeight) > ZLSwithRefreshFootViewHeight * 0.5{
+            if (nowContentOffsetY - tableViewMaxHeight) > ZLSwithRefreshFootViewHeight * 0.3{
                 if scrollView.dragging == false {
                     if loadMoreTempAction != nil {
                         
@@ -136,7 +136,7 @@ extension UIScrollView: UIScrollViewDelegate {
         }
     }
     
-    func stopAnimation(){
+    func doneRefresh(){
         if headerView.headImageView.isAnimating() {
             headerView.stopAnimation()
         }

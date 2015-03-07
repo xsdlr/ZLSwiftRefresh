@@ -23,7 +23,7 @@ class ViewController: UITableViewController {
                 println("toRefreshAction success")
                 self.datas += 30
                 self.tableView.reloadData()
-                self.tableView.stopAnimation()
+                self.tableView.doneRefresh()
             })
         })
         
@@ -33,7 +33,7 @@ class ViewController: UITableViewController {
                 println("toLoadMoreAction success")
                 self.datas += 30
                 self.tableView.reloadData()
-                self.tableView.stopAnimation()
+                self.tableView.doneRefresh()
             });
         })
         
