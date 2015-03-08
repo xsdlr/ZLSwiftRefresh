@@ -36,9 +36,18 @@ class ViewController: UITableViewController {
                 self.tableView.doneRefresh()
             });
         })
-        
+     
+        // 及时上拉刷新
+        self.tableView.nowRefresh { () -> () in
+            self.delay(2.0, closure: { () -> () in
+                println("nowRefresh success")
+                self.datas += 30
+                self.tableView.reloadData()
+                self.tableView.doneRefresh()
+            })
+        }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

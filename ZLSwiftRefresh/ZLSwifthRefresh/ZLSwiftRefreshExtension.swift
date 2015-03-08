@@ -41,6 +41,11 @@ extension UIScrollView: UIScrollViewDelegate {
         loadMoreAction = action
     }
     
+    func nowRefresh(action :(() -> ())){
+        self.toRefreshAction(action)
+        self.contentOffset = CGPointMake(0, -ZLSwithRefreshHeadViewHeight)
+    }
+    
     //MARK: AddHeadView && FootView
     func addHeadView(){
         var headView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
