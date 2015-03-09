@@ -12,7 +12,7 @@ class ZLSwiftHeadView: UIView {
     
     var headLabel: UILabel = UILabel()
     var headImageView : UIImageView = UIImageView()
-    
+    var tableView : UITableView = UITableView()
     var title:String {
         set {
             headLabel.text = newValue
@@ -40,9 +40,7 @@ class ZLSwiftHeadView: UIView {
     }
     
     required init(coder aDecoder: NSCoder) {
-        
         super.init(coder: aDecoder)
-        // Currently it is not supported to load view from nib
     }
     
     func setupUI(){

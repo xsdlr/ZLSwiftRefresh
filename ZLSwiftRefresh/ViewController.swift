@@ -12,49 +12,17 @@ import Foundation
 class ViewController: UITableViewController {
 
     // default datas
-    var datas:Int = 30
+    var datas:[AnyObject] = [
+        "TableView Refresh Example ->",
+//        "CollectionView Refresh Example ->",
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // 下拉刷新
-        self.tableView.toRefreshAction({ () -> () in
-            self.delay(2.0, closure: { () -> () in
-                println("toRefreshAction success")
-                self.datas += 30
-                self.tableView.reloadData()
-                self.tableView.doneRefresh()
-            })
-        })
-        
-        // 上啦加载更多
-        self.tableView.toLoadMoreAction({ () -> () in
-            self.delay(1.0, closure: { () -> () in
-                println("toLoadMoreAction success")
-                self.datas += 30
-                self.tableView.reloadData()
-                self.tableView.doneRefresh()
-            });
-        })
-     
-        // 及时上拉刷新
-        self.tableView.nowRefresh { () -> () in
-            self.delay(2.0, closure: { () -> () in
-                println("nowRefresh success")
-                self.datas += 30
-                self.tableView.reloadData()
-                self.tableView.doneRefresh()
-            })
-        }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.datas;
+        return self.datas.count;
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -63,20 +31,19 @@ class ViewController: UITableViewController {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }
         
-        cell.textLabel.text = "text \(indexPath.row)"
+        cell.textLabel.text = self.datas[indexPath.row] as? String
         
         return cell
     }
     
-        
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == 0 {
+            var example1Vc = Example1ViewController()
+            self.navigationController?.pushViewController(example1Vc as UIViewController, animated: true)
+        }else if indexPath.row == 1{
+//            var example2Vc = Example1ViewController()
+//            self.navigationController?.pushViewController(example1Vc as UIViewController, animated: true)
+        }
     }
-    
 }
 

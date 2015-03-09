@@ -41,5 +41,4 @@ class ZLSwiftFootView: UIView {
         footLabel = footTitleLabel
     }
 
-
 }
