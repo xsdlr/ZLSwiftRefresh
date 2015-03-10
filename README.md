@@ -1,5 +1,5 @@
 # ZLSwiftRefresh
-![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/screenhot.gif)
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/screenhot1.gif)
 
 This is Swift version pull Refresh code.
 -------
