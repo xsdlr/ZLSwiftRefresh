@@ -71,6 +71,7 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: AddHeadView && FootView
     func addHeadView(){
         var headView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
+        headView.scrollView = self
         self.addSubview(headView)
         headerView = headView
         

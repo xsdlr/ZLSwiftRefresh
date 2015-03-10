@@ -63,11 +63,6 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         }
     }
     
-    deinit{
-        self.collectionView.removeObserver(self.collectionView, forKeyPath: contentSizeKeyPath)
-        self.collectionView.removeObserver(self.collectionView, forKeyPath: contentOffsetKeyPath)
-    }
-    
     func setupUI(){
         var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 10

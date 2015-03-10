@@ -12,6 +12,7 @@ class ZLSwiftHeadView: UIView {
     
     var headLabel: UILabel = UILabel()
     var headImageView : UIImageView = UIImageView()
+    var scrollView:UIScrollView = UIScrollView()
     var title:String {
         set {
             headLabel.text = newValue
@@ -68,6 +69,13 @@ class ZLSwiftHeadView: UIView {
     
     func stopAnimation(){
         self.headImageView.stopAnimating()
+    }
+    
+    deinit{
+        if (addObserverNum == 0){
+            self.scrollView.removeObserver(self.scrollView, forKeyPath: contentSizeKeyPath)
+            self.scrollView.removeObserver(self.scrollView, forKeyPath: contentOffsetKeyPath)
+        }
     }
 }
 

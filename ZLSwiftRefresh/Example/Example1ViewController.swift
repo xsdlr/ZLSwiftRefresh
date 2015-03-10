@@ -62,11 +62,6 @@ class Example1ViewController: UITableViewController {
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    deinit{
-        self.tableView.removeObserver(self.tableView, forKeyPath: contentOffsetKeyPath)
-        self.tableView.removeObserver(self.tableView, forKeyPath: contentSizeKeyPath)
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
