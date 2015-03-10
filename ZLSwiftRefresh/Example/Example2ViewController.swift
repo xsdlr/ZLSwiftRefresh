@@ -11,10 +11,64 @@ import UIKit
 class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource {
 
     var datas:Int = 15
+    var titleStr:String {
+        set {
+            self.title = newValue
+        }
+        
+        get {
+            return self.titleStr
+        }
+    }
+    
     var collectionView:UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setupUI()
+        
+        weak var weakSelf = self as Example2ViewController
+        // 下拉刷新
+        collectionView.toRefreshAction { () -> () in
+            weakSelf?.delay(2.0, closure: { () -> () in})
+            weakSelf?.delay(2.0, closure: { () -> () in
+                println("toRefreshAction success")
+                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
+                weakSelf?.collectionView.reloadData()
+                weakSelf?.collectionView.doneRefresh()
+            })
+        }
+
+        // 加载更多
+        collectionView.toLoadMoreAction { () -> () in
+            weakSelf?.delay(1.0, closure: { () -> () in})
+            weakSelf?.delay(1.0, closure: { () -> () in
+                println("toLoadMoreAction success")
+                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
+                weakSelf?.collectionView.reloadData()
+                weakSelf?.collectionView.doneRefresh()
+            })
+        }
+
+        // 立马进去就刷新
+        collectionView.nowRefresh { () -> () in
+            weakSelf?.delay(2.0, closure: { () -> () in})
+            weakSelf?.delay(2.0, closure: { () -> () in
+                println("nowRefresh success")
+                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
+                weakSelf?.collectionView.reloadData()
+                weakSelf?.collectionView.doneRefresh()
+            })
+        }
+    }
+    
+    deinit{
+        self.collectionView.removeObserver(self.collectionView, forKeyPath: contentSizeKeyPath)
+        self.collectionView.removeObserver(self.collectionView, forKeyPath: contentOffsetKeyPath)
+    }
+    
+    func setupUI(){
         var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 10
         flowLayout.minimumInteritemSpacing = 0
@@ -29,44 +83,9 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         collectionView.alwaysBounceVertical = true
         self.view.addSubview(collectionView)
         self.collectionView = collectionView
-        
-        weak var weakSelf = self as Example2ViewController
-        collectionView.toRefreshAction { () -> () in
-            weakSelf?.delay(2.0, closure: { () -> () in})
-            weakSelf?.delay(2.0, closure: { () -> () in
-                println("toRefreshAction success")
-                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
-                collectionView.reloadData()
-                collectionView.doneRefresh()
-            })
-        }
-
-        collectionView.toLoadMoreAction { () -> () in
-            weakSelf?.delay(1.0, closure: { () -> () in})
-            weakSelf?.delay(1.0, closure: { () -> () in
-                println("toLoadMoreAction success")
-                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
-                collectionView.reloadData()
-                collectionView.doneRefresh()
-            })
-        }
-
-        collectionView.nowRefresh { () -> () in
-            weakSelf?.delay(2.0, closure: { () -> () in})
-            weakSelf?.delay(2.0, closure: { () -> () in
-                println("nowRefresh success")
-                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
-                collectionView.reloadData()
-                collectionView.doneRefresh()
-            })
-        }
     }
     
-    deinit{
-        self.collectionView.removeObserver(self.collectionView, forKeyPath: contentSizeKeyPath)
-        self.collectionView.removeObserver(self.collectionView, forKeyPath: contentOffsetKeyPath)
-    }
-    
+    //MARK: <UICollectionViewDataSource>
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -91,8 +110,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         return collectionViewCell
     }
     
-    
-    
+    //MARK: <UICollectionViewDelegate>
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         println("点击了\(indexPath.item)行")
     }

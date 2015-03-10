@@ -11,7 +11,7 @@ import UIKit
 class ZLSwiftFootView: UIView {
     
     var footLabel: UILabel = UILabel()
-    
+
     var title:String {
         set {
             footLabel.text = newValue
@@ -24,7 +24,12 @@ class ZLSwiftFootView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.backgroundColor = UIColor(red: 222.0/255.0, green: 222.0/255.0, blue: 222.0/255.0, alpha: 1.0)
+        self.layer.cornerRadius = 5.0
+        self.layer.masksToBounds = true
         self.setupUI()
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -39,6 +44,7 @@ class ZLSwiftFootView: UIView {
         footTitleLabel.text = ZLSwithRefreshFootViewText
         self.addSubview(footTitleLabel)
         footLabel = footTitleLabel
+        
     }
 
 }

@@ -10,9 +10,9 @@ import UIKit
 
 /** public params config */
 let ZLSwithRefreshHeadViewHeight:CGFloat = 80
-let ZLSwithRefreshFootViewHeight:CGFloat = 80
+let ZLSwithRefreshFootViewHeight:CGFloat = 40
 let ZLSwithRefreshHeadViewText = "下拉加载刷新"
-let ZLSwithRefreshFootViewText = "上啦加载更多"
+let ZLSwithRefreshFootViewText = "上拉加载更多"
 let ZLSwithRefreshMessageText  = "松开刷新"
 let ZLSwithRefreshSuccessText  = "刷新成功"
 let ZLSwithRefreshFailurText   = "刷新失败"
