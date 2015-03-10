@@ -10,7 +10,7 @@ import UIKit
 
 class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource {
 
-    var datas:Int = 3
+    var datas:Int = 15
     var collectionView:UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +26,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         collectionView.dataSource = self as UICollectionViewDataSource
         collectionView.delegate = self as UICollectionViewDelegate
         collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.alwaysBounceVertical = true
         self.view.addSubview(collectionView)
         self.collectionView = collectionView
         
@@ -41,7 +42,13 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         }
 
         collectionView.toLoadMoreAction { () -> () in
-            
+            weakSelf?.delay(1.0, closure: { () -> () in})
+            weakSelf?.delay(1.0, closure: { () -> () in
+                println("toLoadMoreAction success")
+                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
+                collectionView.reloadData()
+                collectionView.doneRefresh()
+            })
         }
 
         collectionView.nowRefresh { () -> () in
@@ -76,7 +83,9 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
             collectionViewCell.contentView.subviews.last?.removeFromSuperview()
         }
         
-        let imageView = UIImageView(image: UIImage(named: "\(indexPath.row % 3 + 1).jpeg"))
+        let imageView = UIImageView(frame: collectionViewCell.bounds)
+        imageView.image = UIImage(named: "\(indexPath.row % 3 + 1).jpeg")
+        imageView.contentMode = .ScaleAspectFit
         collectionViewCell.contentView.addSubview(imageView)
         
         return collectionViewCell

@@ -84,13 +84,14 @@ extension UIScrollView: UIScrollViewDelegate {
         if (self.isKindOfClass(UITableView) == true){
             let tempTableView :UITableView = self as UITableView
             tempTableView.tableFooterView = footView
-            tempTableView.contentInset = UIEdgeInsetsMake(0, 0, -ZLSwithRefreshFootViewHeight, 0)
+            tempTableView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, -ZLSwithRefreshFootViewHeight, 0)
         }else if(self.isKindOfClass(UICollectionView) == true){
+            
             let tempCollectionView :UICollectionView = self as UICollectionView
             var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-            footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight
+            footView.frame.origin.y = height
             tempCollectionView.addSubview(footView)
-            tempCollectionView.contentInset = UIEdgeInsetsMake(0, 0, -ZLSwithRefreshFootViewHeight, 0)
+            tempCollectionView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, ZLSwithRefreshFootViewHeight, 0)
         }
     }
     
@@ -115,7 +116,7 @@ extension UIScrollView: UIScrollViewDelegate {
             if(self.isKindOfClass(UICollectionView) == true){
                 let tempCollectionView :UICollectionView = self as UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight
+                footView.frame.origin.y = height
             }
             
         }else{
@@ -159,7 +160,7 @@ extension UIScrollView: UIScrollViewDelegate {
             if (
                 (tempScrollView.isKindOfClass(UITableView) &&
                     tempScrollView.valueForKeyPath("tableFooterView") != nil)
-                    && scrollViewContentOffsetY > 0)
+                    || scrollViewContentOffsetY > 0)
             {
                 // 上啦加载更多
                 var nowContentOffsetY:CGFloat = scrollView.contentOffset.y + self.frame.size.height
@@ -168,15 +169,23 @@ extension UIScrollView: UIScrollViewDelegate {
                     tempScrollView.valueForKeyPath("tableFooterView") != nil)
                     ){
                         tableViewMaxHeight = CGRectGetMidY(tempScrollView.valueForKeyPath("tableFooterView")!.frame)
+                }else if (tempScrollView.isKindOfClass(UICollectionView)){
+                    let tempCollectionView :UICollectionView = self as UICollectionView
+                    var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                    tableViewMaxHeight = height + ZLSwithRefreshFootViewHeight
                 }
                 
                 if (nowContentOffsetY - tableViewMaxHeight) > ZLSwithRefreshFootViewHeight * 0.3{
-                    if scrollView.dragging == false {
+                    if scrollView.dragging == false && refreshStatus == .Normal {
                         if loadMoreTempAction != nil {
                             
                             refreshStatus = .LoadMore
                             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                                scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top, 0, 0, 0)
+                                if (self.isKindOfClass(UITableView)) {
+                                    scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top, 0, 0, 0)
+                                }else if(self.isKindOfClass(UICollectionView)){
+                                    scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top, 0, ZLSwithRefreshFootViewHeight, 0)
+                                }
                             })
                             footView.title = ZLSwithRefreshLoadingText
                             if(loadMoreTempAction != nil){
@@ -184,13 +193,14 @@ extension UIScrollView: UIScrollViewDelegate {
                                 loadMoreTempAction = {}
                             }
                             
-                        } else {
-                            footView.title = ZLSwithRefreshMessageText
                         }
+                    } else if (refreshStatus != .LoadMore){
+                        footView.title = ZLSwithRefreshMessageText
+                        loadMoreTempAction = loadMoreAction
                     }
                     
                     
-                }else{
+                }else if (refreshStatus != .LoadMore){
                     loadMoreTempAction = loadMoreAction
                     footView.title = ZLSwithRefreshFootViewText
                 }
@@ -204,8 +214,17 @@ extension UIScrollView: UIScrollViewDelegate {
             headerView.stopAnimation()
         }
         if refreshStatus == .LoadMore {
+            
+            var offsetValue:CGFloat = 0
+            if (self.isKindOfClass(UITableView)){
+                offsetValue = 0
+            }else{
+                offsetValue = ZLSwithRefreshFootViewHeight
+            }
+            
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, -ZLSwithRefreshFootViewHeight, 0)
+                self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue, 0)
+                footView.title = ZLSwithRefreshFootViewText
             })
         }else if refreshStatus == .Refresh {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
@@ -226,6 +245,8 @@ extension UIScrollView: UIScrollViewDelegate {
                 self.contentInset = UIEdgeInsetsMake(top! + offset, 0, self.contentInset.bottom, 0)
             })
         }
+        
+        refreshStatus = .Normal
     }
 
     func getViewControllerWithView(vcView:UIView) -> AnyObject{
