@@ -14,7 +14,7 @@ class ViewController: UITableViewController {
     // default datas
     var datas:[AnyObject] = [
         "TableView Refresh Example ->",
-//        "CollectionView Refresh Example ->",
+        "CollectionView Refresh Example ->",
     ]
     
     override func viewDidLoad() {
@@ -38,11 +38,13 @@ class ViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
+            // TableView
             var example1Vc = Example1ViewController()
             self.navigationController?.pushViewController(example1Vc as UIViewController, animated: true)
         }else if indexPath.row == 1{
-//            var example2Vc = Example1ViewController()
-//            self.navigationController?.pushViewController(example1Vc as UIViewController, animated: true)
+            // collectionView
+            var example2Vc = Example2ViewController()
+            self.navigationController?.pushViewController(example2Vc as UIViewController, animated: true)
         }
     }
 }

@@ -17,7 +17,6 @@ class Example1ViewController: UITableViewController {
         super.viewDidLoad()
         
         weak var weakSelf = self as Example1ViewController
-        
         // 下拉刷新
         self.tableView.toRefreshAction({ () -> () in
             weakSelf?.delay(2.0, closure: { () -> () in
@@ -55,7 +54,8 @@ class Example1ViewController: UITableViewController {
     }
     
     deinit{
-        println("deinit")
+        self.tableView.removeObserver(self.tableView, forKeyPath: contentOffsetKeyPath)
+        self.tableView.removeObserver(self.tableView, forKeyPath: contentSizeKeyPath)
     }
     
     override func didReceiveMemoryWarning() {
@@ -87,9 +87,4 @@ class Example1ViewController: UITableViewController {
             ),
             dispatch_get_main_queue(), closure)
     }
-    
-//    deinit{
-//        self.tableView.removeObserver(self, forKeyPath: "contentOffset")
-//    }
-    
 }

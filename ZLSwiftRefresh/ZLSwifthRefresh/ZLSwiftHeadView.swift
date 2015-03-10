@@ -12,7 +12,6 @@ class ZLSwiftHeadView: UIView {
     
     var headLabel: UILabel = UILabel()
     var headImageView : UIImageView = UIImageView()
-    var tableView : UITableView = UITableView()
     var title:String {
         set {
             headLabel.text = newValue
