@@ -11,7 +11,7 @@ import UIKit
 class Example1ViewController: UITableViewController {
     
     // default datas
-    var datas:Int = 30
+    var datas:Int = 10
     var titleStr:String {
         set {
             self.title = newValue
@@ -30,7 +30,7 @@ class Example1ViewController: UITableViewController {
         self.tableView.toRefreshAction({ () -> () in
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("toRefreshAction success")
-                weakSelf?.datas += 30
+                weakSelf?.datas += 10
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             })
@@ -42,7 +42,7 @@ class Example1ViewController: UITableViewController {
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(1.0, closure: { () -> () in
                 println("toLoadMoreAction success")
-                weakSelf?.datas += 30
+                weakSelf?.datas += 10
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             });
@@ -53,7 +53,7 @@ class Example1ViewController: UITableViewController {
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
-                weakSelf?.datas += 30
+                weakSelf?.datas += 10
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             })

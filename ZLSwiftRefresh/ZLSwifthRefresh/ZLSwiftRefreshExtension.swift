@@ -203,7 +203,7 @@ extension UIScrollView: UIScrollViewDelegate {
                     loadMoreTempAction = loadMoreAction
                     footView.title = ZLSwithRefreshFootViewText
                 }
-            }else{
+            }else if (refreshStatus != .LoadMore){
                 footView.title = ZLSwithRefreshFootViewText                
             }
         }

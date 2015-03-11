@@ -10,7 +10,7 @@ import UIKit
 
 class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource {
 
-    var datas:Int = 15
+    var datas:Int = 10
     var titleStr:String {
         set {
             self.title = newValue
@@ -45,7 +45,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
             weakSelf?.delay(1.0, closure: { () -> () in})
             weakSelf?.delay(1.0, closure: { () -> () in
                 println("toLoadMoreAction success")
-                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
+                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
             })
