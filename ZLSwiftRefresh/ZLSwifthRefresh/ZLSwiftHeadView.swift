@@ -59,11 +59,9 @@ class ZLSwiftHeadView: UIView {
         var results:[AnyObject] = []
         
         for i in 1..<4{
-//            if let imageData = "dropdown_loading_0\(i).png" as String? {
-                if let image = UIImage(named: "dropdown_loading_0\(i).png") {
-                    results.append(image)
-                }
-//            }
+            if let image = UIImage(named: "dropdown_loading_0\(i).png") {
+                results.append(image)
+            }
         }
 
         

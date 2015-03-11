@@ -78,7 +78,7 @@ extension UIScrollView: UIScrollViewDelegate {
     }
     
     func addFootView(){
-        footView = ZLSwiftFootView(frame: CGRectMake(self.frame.size.width / 4, -ZLSwithRefreshFootViewHeight, self.frame.size.width / 2, ZLSwithRefreshFootViewHeight))
+        footView = ZLSwiftFootView(frame: CGRectMake( 0 , -ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
         
         if (self.isKindOfClass(UITableView) == true){
             let tempTableView :UITableView = self as UITableView

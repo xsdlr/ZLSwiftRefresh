@@ -26,8 +26,6 @@ class ZLSwiftFootView: UIView {
         super.init(frame: frame)
         
         self.backgroundColor = UIColor(red: 222.0/255.0, green: 222.0/255.0, blue: 222.0/255.0, alpha: 1.0)
-        self.layer.cornerRadius = 5.0
-        self.layer.masksToBounds = true
         self.setupUI()
         
     }
@@ -44,7 +42,6 @@ class ZLSwiftFootView: UIView {
         footTitleLabel.text = ZLSwithRefreshFootViewText
         self.addSubview(footTitleLabel)
         footLabel = footTitleLabel
-        
     }
 
 }
