@@ -26,6 +26,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = UIColor.whiteColor()
         self.setupUI()
         
         weak var weakSelf = self as Example2ViewController
@@ -34,7 +35,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("toRefreshAction success")
-                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
+                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
             })
@@ -42,10 +43,10 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
 
         // 加载更多
         collectionView.toLoadMoreAction { () -> () in
-            weakSelf?.delay(1.0, closure: { () -> () in})
-            weakSelf?.delay(1.0, closure: { () -> () in
+            weakSelf?.delay(0.5, closure: { () -> () in})
+            weakSelf?.delay(0.5, closure: { () -> () in
                 println("toLoadMoreAction success")
-                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
+                weakSelf?.datas += 5//(Int)(arc4random_uniform(10)) + 1
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
             })
@@ -56,7 +57,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
-                weakSelf?.datas += (Int)(arc4random_uniform(4)) + 1
+                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
             })
@@ -66,11 +67,11 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     func setupUI(){
         var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 10
-        flowLayout.minimumInteritemSpacing = 0
-        flowLayout.itemSize = CGSizeMake(100, 100)
+        flowLayout.minimumInteritemSpacing = 10
+        flowLayout.itemSize = CGSizeMake(80, 80)
         flowLayout.scrollDirection = .Vertical
         
-        var collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: flowLayout)
+        var collectionView = UICollectionView(frame: CGRectMake(20, 20, self.view.frame.width - 40, self.view.frame.height), collectionViewLayout: flowLayout)
         collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.dataSource = self as UICollectionViewDataSource
         collectionView.delegate = self as UICollectionViewDelegate
@@ -91,16 +92,8 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var collectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as UICollectionViewCell
-        collectionViewCell.backgroundColor = UIColor.whiteColor()
-        
-        if ( collectionViewCell.contentView.subviews.last?.isKindOfClass(UIImageView) == true){
-            collectionViewCell.contentView.subviews.last?.removeFromSuperview()
-        }
-        
-        let imageView = UIImageView(frame: collectionViewCell.bounds)
-        imageView.image = UIImage(named: "\(indexPath.row % 3 + 1).jpeg")
-        imageView.contentMode = .ScaleAspectFit
-        collectionViewCell.contentView.addSubview(imageView)
+
+        collectionViewCell.backgroundColor = UIColor(red: CGFloat(CGFloat(arc4random_uniform(256))/255), green: CGFloat(CGFloat(arc4random_uniform(256))/255), blue: CGFloat(CGFloat(arc4random_uniform(256))/255.0), alpha: 1)
         
         return collectionViewCell
     }

@@ -30,6 +30,7 @@ var refreshStatus:RefreshStatus = .Normal
 let animations:CGFloat = 60.0
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
 var nowLoading:Bool = false
+var recoderLastLoadMoreY:CGFloat = 0
 
 extension UIScrollView: UIScrollViewDelegate {
     
@@ -88,7 +89,7 @@ extension UIScrollView: UIScrollViewDelegate {
             
             let tempCollectionView :UICollectionView = self as UICollectionView
             var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-            footView.frame.origin.y = height
+            footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
             tempCollectionView.addSubview(footView)
             tempCollectionView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, ZLSwithRefreshFootViewHeight, 0)
         }
@@ -115,7 +116,7 @@ extension UIScrollView: UIScrollViewDelegate {
             if(self.isKindOfClass(UICollectionView) == true){
                 let tempCollectionView :UICollectionView = self as UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                footView.frame.origin.y = height
+                footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
             }
             
         }else{
@@ -171,34 +172,27 @@ extension UIScrollView: UIScrollViewDelegate {
                 }else if (tempScrollView.isKindOfClass(UICollectionView)){
                     let tempCollectionView :UICollectionView = self as UICollectionView
                     var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                    tableViewMaxHeight = height + ZLSwithRefreshFootViewHeight
+                    tableViewMaxHeight = height
                 }
                 
-                if (nowContentOffsetY - tableViewMaxHeight) > ZLSwithRefreshFootViewHeight * 0.3{
-                    if scrollView.dragging == false && refreshStatus == .Normal {
+                if (self.userInteractionEnabled == true){
+                    loadMoreTempAction = loadMoreAction
+                }
+                if (nowContentOffsetY - tableViewMaxHeight) > 0{
+                    if refreshStatus == .Normal {
                         if loadMoreTempAction != nil {
                             
                             refreshStatus = .LoadMore
-                            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                                if (self.isKindOfClass(UITableView)) {
-                                    scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top, 0, 0, 0)
-                                }else if(self.isKindOfClass(UICollectionView)){
-                                    scrollView.contentInset = UIEdgeInsetsMake(scrollView.contentInset.top, 0, ZLSwithRefreshFootViewHeight, 0)
-                                }
-                            })
+                            self.userInteractionEnabled = false
                             footView.title = ZLSwithRefreshLoadingText
                             if(loadMoreTempAction != nil){
                                 loadMoreTempAction()
                                 loadMoreTempAction = {}
+                                recoderLastLoadMoreY = nowContentOffsetY - self.frame.height + 64
                             }
                             
                         }
-                    } else if (refreshStatus != .LoadMore){
-                        footView.title = ZLSwithRefreshMessageText
-                        loadMoreTempAction = loadMoreAction
                     }
-                    
-                    
                 }else if (refreshStatus != .LoadMore){
                     loadMoreTempAction = loadMoreAction
                     footView.title = ZLSwithRefreshFootViewText
@@ -214,8 +208,11 @@ extension UIScrollView: UIScrollViewDelegate {
         if headerView.headImageView.isAnimating() {
             headerView.stopAnimation()
         }
+        
+        self.userInteractionEnabled = true
         if refreshStatus == .LoadMore {
             
+
             var offsetValue:CGFloat = 0
             if (self.isKindOfClass(UITableView)){
                 offsetValue = 0
@@ -227,29 +224,48 @@ extension UIScrollView: UIScrollViewDelegate {
                 self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue, 0)
                 footView.title = ZLSwithRefreshFootViewText
             })
+            
+            self.contentOffset.y = self.contentOffset.y - ZLSwithRefreshFootViewHeight
         }else if refreshStatus == .Refresh {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                var vc = UIViewController()
-                if self.getViewControllerWithView(self).isKindOfClass(UIViewController) == true {
-                    vc = self.getViewControllerWithView(self) as UIViewController
-                }
-                var top = vc.navigationController?.navigationBar.frame.height
-                if top == nil{
-                    top = 0
-                }
-                // iOS7
-                var offset:CGFloat = 20
-                if((UIDevice.currentDevice().systemVersion as NSString).floatValue < 7.0){
-                    offset = 0
-                }
                 
-                self.contentInset = UIEdgeInsetsMake(top! + offset, 0, self.contentInset.bottom, 0)
+                self.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.contentInset.bottom, 0)
             })
         }
         
         refreshStatus = .Normal
     }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
 
+    
+    //MARK: getNavigaition Height -> delete
+    func getNavigationHeight() -> CGFloat{
+        var vc = UIViewController()
+        if self.getViewControllerWithView(self).isKindOfClass(UIViewController) == true {
+            vc = self.getViewControllerWithView(self) as UIViewController
+        }
+        
+        var top = vc.navigationController?.navigationBar.frame.height
+        if top == nil{
+            top = 0
+        }
+        // iOS7
+        var offset:CGFloat = 20
+        if((UIDevice.currentDevice().systemVersion as NSString).floatValue < 7.0){
+            offset = 0
+        }
+
+        return offset + top!
+    }
+    
     func getViewControllerWithView(vcView:UIView) -> AnyObject{
         if( (vcView.nextResponder()?.isKindOfClass(UIViewController) ) == true){
             return vcView.nextResponder() as UIViewController

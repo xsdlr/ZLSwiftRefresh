@@ -30,7 +30,7 @@ class Example1ViewController: UITableViewController {
         self.tableView.toRefreshAction({ () -> () in
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("toRefreshAction success")
-                weakSelf?.datas += 10
+                weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             })
@@ -39,13 +39,13 @@ class Example1ViewController: UITableViewController {
         
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
-            weakSelf?.delay(2.0, closure: { () -> () in})
-            weakSelf?.delay(1.0, closure: { () -> () in
+//            weakSelf?.delay(2.0, closure: { () -> () in})
+//            weakSelf?.delay(1.0, closure: { () -> () in
                 println("toLoadMoreAction success")
-                weakSelf?.datas += 10
+                weakSelf?.datas += 30
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
-            });
+//            });
         })
         
         // 及时上拉刷新
@@ -53,7 +53,7 @@ class Example1ViewController: UITableViewController {
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
-                weakSelf?.datas += 10
+                weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             })
