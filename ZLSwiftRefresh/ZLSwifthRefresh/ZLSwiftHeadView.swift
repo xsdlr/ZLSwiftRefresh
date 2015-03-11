@@ -55,11 +55,17 @@ class ZLSwiftHeadView: UIView {
     }
 
     func startAnimation(){
-        var results:[AnyObject] = [
-            UIImage(named: "dropdown_loading_01.png")!,
-            UIImage(named: "dropdown_loading_02.png")!,
-            UIImage(named: "dropdown_loading_03.png")!
-        ]
+        
+        var results:[AnyObject] = []
+        
+        for i in 1..<4{
+//            if let imageData = "dropdown_loading_0\(i).png" as String? {
+                if let image = UIImage(named: "dropdown_loading_0\(i).png") {
+                    results.append(image)
+                }
+//            }
+        }
+
         
         self.headImageView.animationImages = results as [AnyObject]?
         self.headImageView.animationDuration = 0.6;
