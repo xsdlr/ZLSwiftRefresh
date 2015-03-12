@@ -32,6 +32,7 @@ class ViewController: UITableViewController {
     var datas:[AnyObject] = [
         "TableView Refresh Example ->",
         "CollectionView Refresh Example ->",
+        "WebView Refresh Example ->",
     ]
     
     override func viewDidLoad() {
@@ -64,6 +65,11 @@ class ViewController: UITableViewController {
             var example2Vc = Example2ViewController()
             example2Vc.titleStr = self.datas[indexPath.row] as String
             self.navigationController?.pushViewController(example2Vc as UIViewController, animated: true)
+        }else if indexPath.row == 2{
+            // webView
+            var example3Vc = Example3ViewController()
+            example3Vc.titleStr = self.datas[indexPath.row] as String
+            self.navigationController?.pushViewController(example3Vc as UIViewController, animated: true)
         }
     }
 }

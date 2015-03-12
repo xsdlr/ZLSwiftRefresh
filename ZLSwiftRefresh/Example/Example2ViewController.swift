@@ -46,7 +46,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
             weakSelf?.delay(0.5, closure: { () -> () in})
             weakSelf?.delay(0.5, closure: { () -> () in
                 println("toLoadMoreAction success")
-                if weakSelf?.datas < 20 {
+                if weakSelf?.datas < 40 {
                     weakSelf?.datas += 5//(Int)(arc4random_uniform(10)) + 1
                     weakSelf?.collectionView.reloadData()
                 }else {
