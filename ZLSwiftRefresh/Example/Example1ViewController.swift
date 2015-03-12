@@ -39,15 +39,14 @@ class Example1ViewController: UITableViewController {
         
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
-//            weakSelf?.delay(2.0, closure: { () -> () in})
-//            weakSelf?.delay(1.0, closure: { () -> () in
-                println("toLoadMoreAction success")
-            if (weakSelf?.datas < 60){
+            println("toLoadMoreAction success")
+            if (weakSelf?.datas < 120){
                 weakSelf?.datas += 30
                 weakSelf?.tableView.reloadData()
-            }
                 weakSelf?.tableView.doneRefresh()
-//            });
+            }else{
+                weakSelf?.tableView.endLoadMoreData()
+            }
         })
         
         // 及时上拉刷新
@@ -80,7 +79,7 @@ class Example1ViewController: UITableViewController {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }
         
-        cell.textLabel.text = "text \(indexPath.row)"
+        cell.textLabel.text = "测试数据 - \(indexPath.row)"
         
         return cell
     }

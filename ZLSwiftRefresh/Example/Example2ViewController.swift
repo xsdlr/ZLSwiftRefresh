@@ -47,8 +47,11 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
             weakSelf?.delay(0.5, closure: { () -> () in
                 println("toLoadMoreAction success")
                 if weakSelf?.datas < 30 {
-                    weakSelf?.datas += 7//(Int)(arc4random_uniform(10)) + 1
+                    weakSelf?.datas += 5//(Int)(arc4random_uniform(10)) + 1
                     weakSelf?.collectionView.reloadData()
+                }else {
+                    // 数据加载完毕
+                    weakSelf?.collectionView.endLoadMoreData()
                 }
                 weakSelf?.collectionView.doneRefresh()
             })
