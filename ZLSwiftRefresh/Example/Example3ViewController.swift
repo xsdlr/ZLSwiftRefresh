@@ -11,6 +11,7 @@ import UIKit
 class Example3ViewController: UIViewController,UIWebViewDelegate {
 
     var webView:UIWebView = UIWebView()
+
     var titleStr:String {
         set {
             self.title = newValue
@@ -32,7 +33,7 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
             self.webView.reload()
         }
         
-        // Do any additional setup after loading the view.
+     
     }
 
     override func didReceiveMemoryWarning() {

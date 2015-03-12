@@ -190,7 +190,11 @@ extension UIScrollView: UIScrollViewDelegate {
         
         // change contentOffset
         var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
-        if (scrollViewContentOffsetY <= -ZLSwithRefreshHeadViewHeight - self.contentInset.top) {
+        var height = ZLSwithRefreshHeadViewHeight
+        if (ZLSwithRefreshHeadViewHeight > animations){
+            height = animations
+        }
+        if (scrollViewContentOffsetY <= -height - self.contentInset.top) {
             // 上拉刷新
             if scrollView.dragging == false && headerView.headImageView.isAnimating() == false{
                 if refreshTempAction != nil {
