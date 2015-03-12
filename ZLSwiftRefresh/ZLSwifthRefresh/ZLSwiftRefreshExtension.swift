@@ -31,6 +31,7 @@ let animations:CGFloat = 60.0
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
 var nowLoading:Bool = false
 var recoderLastLoadMoreY:CGFloat = 0
+var valueOffset:CGFloat = 0
 
 extension UIScrollView: UIScrollViewDelegate {
     
@@ -175,20 +176,30 @@ extension UIScrollView: UIScrollViewDelegate {
                     tableViewMaxHeight = height
                 }
                 
-                if (self.userInteractionEnabled == true){
+                if (self.userInteractionEnabled == true && refreshStatus == .Normal){
                     loadMoreTempAction = loadMoreAction
                 }
-                if (nowContentOffsetY - tableViewMaxHeight) > 0{
+                if (nowContentOffsetY - tableViewMaxHeight) > valueOffset && self.contentOffset.y != 0{
                     if refreshStatus == .Normal {
                         if loadMoreTempAction != nil {
                             
+//                            self.userInteractionEnabled = false
                             refreshStatus = .LoadMore
-                            self.userInteractionEnabled = false
                             footView.title = ZLSwithRefreshLoadingText
-                            if(loadMoreTempAction != nil){
-                                loadMoreTempAction()
-                                loadMoreTempAction = {}
-                                recoderLastLoadMoreY = nowContentOffsetY - self.frame.height + 64
+                            if (recoderLastLoadMoreY == 0){
+                                    
+                                    if ((self.isKindOfClass(UITableView) == true && footView.frame.origin.y == tableViewMaxHeight - footView.frame.height / 2) || (self.isKindOfClass(UICollectionView) == true && footView.frame.origin.y == tableViewMaxHeight + footView.frame.height / 2)){
+                                        
+                                    }else{
+                                        loadMoreTempAction()
+                                        loadMoreTempAction = {}
+                                        recoderLastLoadMoreY = nowContentOffsetY - self.frame.height + 64
+                                    }
+                                
+                                
+                            
+                            }else{
+                                footView.title = ZLSwithRefreshMessageText                                
                             }
                             
                         }
@@ -220,12 +231,28 @@ extension UIScrollView: UIScrollViewDelegate {
                 offsetValue = ZLSwithRefreshFootViewHeight
             }
             
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue, 0)
+            if (self.dragging == false){
                 footView.title = ZLSwithRefreshFootViewText
-            })
+            }
             
-            self.contentOffset.y = self.contentOffset.y - ZLSwithRefreshFootViewHeight
+            if (self.isKindOfClass(UICollectionView)) {
+                UIView.animateWithDuration(0.25, animations: { () -> Void in
+                    self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue + ZLSwithRefreshFootViewHeight + ZLSwithRefreshFootViewHeight / 2, 0)
+                })
+                
+                // footView必须超过了屏幕才进行计算
+                if (
+                    footView.frame.origin.y - footView.frame.height * 2 > self.frame.height && self.contentOffset.y + self.frame.height < footView.frame.origin.y + footView.frame.height ){
+                    self.contentOffset.y = self.contentOffset.y - ZLSwithRefreshFootViewHeight
+                }
+            }else{
+                UIView.animateWithDuration(0.25, animations: { () -> Void in
+                    self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue, 0)
+                })
+            }
+            
+            
+            valueOffset = ZLSwithRefreshFootViewHeight
         }else if refreshStatus == .Refresh {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
                 
@@ -235,16 +262,6 @@ extension UIScrollView: UIScrollViewDelegate {
         
         refreshStatus = .Normal
     }
-    
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
-    }
-
     
     //MARK: getNavigaition Height -> delete
     func getNavigationHeight() -> CGFloat{

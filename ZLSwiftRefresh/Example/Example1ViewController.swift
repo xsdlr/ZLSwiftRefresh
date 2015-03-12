@@ -42,8 +42,10 @@ class Example1ViewController: UITableViewController {
 //            weakSelf?.delay(2.0, closure: { () -> () in})
 //            weakSelf?.delay(1.0, closure: { () -> () in
                 println("toLoadMoreAction success")
+            if (weakSelf?.datas < 60){
                 weakSelf?.datas += 30
                 weakSelf?.tableView.reloadData()
+            }
                 weakSelf?.tableView.doneRefresh()
 //            });
         })
