@@ -118,101 +118,11 @@ extension UIScrollView: UIScrollViewDelegate {
     }
     
     public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-
-        var scrollView = self
-        var tempScrollView = self
-        if(self.isKindOfClass(UITableView) == true){
-            tempScrollView = self as UITableView
-        }
-        if (keyPath == contentSizeKeyPath){
-            
-            if(self.isKindOfClass(UICollectionView) == true){
-                let tempCollectionView :UICollectionView = self as UICollectionView
-                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
-            }
-            
-        }else{
-            var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
-            // 下拉刷新
-            if (scrollViewContentOffsetY <= -ZLSwithRefreshHeadViewHeight - self.contentInset.top) {
-                // 提示 -》松开刷新
-                if scrollView.dragging == false && headerView.headImageView.isAnimating() == false{
-                    if refreshTempAction != nil {
-                        refreshStatus = .Refresh
-                        headerView.startAnimation()
-                        UIView.animateWithDuration(0.25, animations: { () -> Void in
-                            scrollView.contentInset = UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight + self.contentInset.top, 0, scrollView.contentInset.bottom, 0)
-                        })
-                        
-                        if (nowLoading == true){
-                            nowRefreshAction()
-                            nowRefreshAction = {}
-                            nowLoading = false
-                        }else{
-                            refreshTempAction()
-                            refreshTempAction = {}
-                        }
-                    }
-                }
-                
-            }else{
-                
-                refreshTempAction = refreshAction
-                var v:CGFloat = scrollViewContentOffsetY + self.contentInset.top
-                if (v < -animations){
-                    v = animations
-                }
-                
-                if ((Int)(abs(v)) > 0){
-                    headerView.imgName = "\((Int)(abs(v)))"
-                }
-            }
-            
-            
-            if (
-                (tempScrollView.isKindOfClass(UITableView) &&
-                    tempScrollView.valueForKeyPath("tableFooterView") != nil)
-                    || scrollViewContentOffsetY > 0)
-            {
-                // 上啦加载更多
-                var nowContentOffsetY:CGFloat = scrollView.contentOffset.y + self.frame.size.height
-                var tableViewMaxHeight:CGFloat = 0
-                if ((tempScrollView.isKindOfClass(UITableView) &&
-                    tempScrollView.valueForKeyPath("tableFooterView") != nil)
-                    ){
-                        tableViewMaxHeight = CGRectGetMidY(tempScrollView.valueForKeyPath("tableFooterView")!.frame)
-                }else if (tempScrollView.isKindOfClass(UICollectionView)){
-                    let tempCollectionView :UICollectionView = self as UICollectionView
-                    var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                    tableViewMaxHeight = height
-                }
-                
-                if (self.userInteractionEnabled == true && refreshStatus == .Normal){
-                    loadMoreTempAction = loadMoreAction
-                }
-                if (nowContentOffsetY - tableViewMaxHeight) > valueOffset && self.contentOffset.y != 0{
-                    if refreshStatus == .Normal {
-                        if isEndLoadMore == false && loadMoreTempAction != nil{
-                            refreshStatus = .LoadMore
-                            footView.title = ZLSwithRefreshLoadingText
-                            loadMoreTempAction()
-                            loadMoreTempAction = {}
-                        } else {
-                            footView.title = ZLSwithRefreshMessageText
-                        }
-                    }
-                }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
-                    loadMoreTempAction = loadMoreAction
-                    footView.title = ZLSwithRefreshFootViewText
-                }
-            }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
-                footView.title = ZLSwithRefreshFootViewText                
-            }
-        }
-        
+        self.changeSelfView(keyPath)
     }
     
+    //MARK: doneRefersh
+    //完成刷新
     func doneRefresh(){
         if headerView.headImageView.isAnimating() {
             headerView.stopAnimation()
@@ -262,6 +172,102 @@ extension UIScrollView: UIScrollViewDelegate {
         }
         
         refreshStatus = .Normal
+    }
+    
+    func changeSelfView(keyPath:String){
+        var scrollView = self
+        
+        if (keyPath == contentSizeKeyPath){
+            // change contentSize
+            if(self.isKindOfClass(UICollectionView) == true){
+                let tempCollectionView :UICollectionView = self as UICollectionView
+                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
+            }
+            
+            return;
+        }
+        
+        // change contentOffset
+        var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
+        if (scrollViewContentOffsetY <= -ZLSwithRefreshHeadViewHeight - self.contentInset.top) {
+            // 上拉刷新
+            if scrollView.dragging == false && headerView.headImageView.isAnimating() == false{
+                if refreshTempAction != nil {
+                    refreshStatus = .Refresh
+                    headerView.startAnimation()
+                    UIView.animateWithDuration(0.25, animations: { () -> Void in
+                        scrollView.contentInset = UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight + self.contentInset.top, 0, scrollView.contentInset.bottom, 0)
+                    })
+                    
+                    if (nowLoading == true){
+                        nowRefreshAction()
+                        nowRefreshAction = {}
+                        nowLoading = false
+                    }else{
+                        refreshTempAction()
+                        refreshTempAction = {}
+                    }
+                }
+            }
+            
+        }else{
+            refreshTempAction = refreshAction
+            var v:CGFloat = scrollViewContentOffsetY + self.contentInset.top
+            if (v < -animations){
+                v = animations
+            }
+            
+            if ((Int)(abs(v)) > 0){
+                headerView.imgName = "\((Int)(abs(v)))"
+            }
+        }
+        
+        // 上拉加载更多
+        if (
+            (scrollView.isKindOfClass(UITableView) &&
+                scrollView.valueForKeyPath("tableFooterView") != nil) ||
+                scrollViewContentOffsetY > 0
+            )
+        {
+            var nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.frame.size.height
+            var tableViewMaxHeight:CGFloat = 0
+            
+            if (
+                scrollView.isKindOfClass(UITableView) &&
+                    scrollView.valueForKeyPath("tableFooterView") != nil
+                )
+            {
+                tableViewMaxHeight = CGRectGetMidY(scrollView.valueForKeyPath("tableFooterView")!.frame)
+            }else if (scrollView.isKindOfClass(UICollectionView))
+            {
+                let tempCollectionView :UICollectionView = self as UICollectionView
+                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                tableViewMaxHeight = height
+            }
+            
+            if (self.userInteractionEnabled == true && refreshStatus == .Normal){
+                loadMoreTempAction = loadMoreAction
+            }
+            
+            if (nowContentOffsetY - tableViewMaxHeight) > valueOffset && self.contentOffset.y != 0{
+                if refreshStatus == .Normal {
+                    if isEndLoadMore == false && loadMoreTempAction != nil{
+                        refreshStatus = .LoadMore
+                        footView.title = ZLSwithRefreshLoadingText
+                        loadMoreTempAction()
+                        loadMoreTempAction = {}
+                    }else {
+                        footView.title = ZLSwithRefreshMessageText
+                    }
+                }
+            }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
+                loadMoreTempAction = loadMoreAction
+                footView.title = ZLSwithRefreshFootViewText
+            }
+        }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
+            footView.title = ZLSwithRefreshFootViewText
+        }
     }
     
     //MARK: getNavigaition Height -> delete

@@ -9,6 +9,23 @@
 import UIKit
 import Foundation
 
+/**
+*  使用说明(Use)：
+下拉刷新
+self.tableView.toRefreshAction{ () -> () in
+    callBack to do..
+}
+
+上拉刷新
+self.tableView.toLoadMoreAction{ () -> () in
+    callBack to do..
+}
+
+立刻刷新
+self.tableView.nowRefresh{ () -> () in
+    callBack to do..
+}
+*/
 class ViewController: UITableViewController {
 
     // default datas
