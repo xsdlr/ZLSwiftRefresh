@@ -25,6 +25,7 @@ var nowRefreshAction: (() -> ()) = {}
 
 var refreshTempAction:(() -> ()) = {}
 var loadMoreTempAction:(() -> ()) = {}
+var loadMoreEndTempAction:(() -> ()) = {}
 
 var refreshStatus:RefreshStatus = .Normal
 let animations:CGFloat = 60.0
@@ -52,6 +53,7 @@ extension UIScrollView: UIScrollViewDelegate {
         self.addOnlyAction();
         self.addFootView()
         loadMoreAction = action
+        loadMoreEndTempAction = action
     }
     
     //MARK: nowRefresh
@@ -248,9 +250,13 @@ extension UIScrollView: UIScrollViewDelegate {
             
         }else if refreshStatus == .Refresh {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                
                 self.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.contentInset.bottom, 0)
             })
+            
+            // Reset LoadMore status
+            loadMoreAction = loadMoreEndTempAction
+            loadMoreTempAction = loadMoreAction
+            isEndLoadMore = false
         }
         
         refreshStatus = .Normal
