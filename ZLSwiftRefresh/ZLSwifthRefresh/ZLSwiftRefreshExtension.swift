@@ -193,18 +193,20 @@ extension UIScrollView: UIScrollViewDelegate {
                 }
                 if (nowContentOffsetY - tableViewMaxHeight) > valueOffset && self.contentOffset.y != 0{
                     if refreshStatus == .Normal {
-                        if isEndLoadMore == false {
+                        if isEndLoadMore == false && loadMoreTempAction != nil{
                             refreshStatus = .LoadMore
                             footView.title = ZLSwithRefreshLoadingText
                             loadMoreTempAction()
                             loadMoreTempAction = {}
+                        } else {
+                            footView.title = ZLSwithRefreshMessageText
                         }
                     }
-                }else if (refreshStatus != .LoadMore){
+                }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
                     loadMoreTempAction = loadMoreAction
                     footView.title = ZLSwithRefreshFootViewText
                 }
-            }else if (refreshStatus != .LoadMore){
+            }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
                 footView.title = ZLSwithRefreshFootViewText                
             }
         }

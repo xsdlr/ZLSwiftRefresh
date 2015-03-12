@@ -40,8 +40,8 @@ class Example1ViewController: UITableViewController {
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
             println("toLoadMoreAction success")
-            if (weakSelf?.datas < 120){
-                weakSelf?.datas += 30
+            if (weakSelf?.datas < 60){
+                weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             }else{
