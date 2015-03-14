@@ -12,15 +12,6 @@ class Example1ViewController: UITableViewController {
     
     // default datas
     var datas:Int = 10
-    var titleStr:String {
-        set {
-            self.title = newValue
-        }
-        
-        get {
-            return self.titleStr
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

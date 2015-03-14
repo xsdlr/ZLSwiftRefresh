@@ -78,6 +78,7 @@ extension UIScrollView: UIScrollViewDelegate {
     //配置信息
     func addOnlyAction(){
         self.addObserver()
+        self.alwaysBounceVertical = true
         tableViewOriginContentInset = self.contentInset
     }
     
@@ -92,19 +93,18 @@ extension UIScrollView: UIScrollViewDelegate {
     
     func addFootView(){
         isEndLoadMore = false
-        footView = ZLSwiftFootView(frame: CGRectMake( 0 , -ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
+        footView = ZLSwiftFootView(frame: CGRectMake( 0 , self.frame.height, self.frame.size.width, ZLSwithRefreshFootViewHeight))
         
-        if (self.isKindOfClass(UITableView) == true){
-            let tempTableView :UITableView = self as UITableView
-            tempTableView.tableFooterView = footView
-            tempTableView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, -ZLSwithRefreshFootViewHeight, 0)
-        }else if(self.isKindOfClass(UICollectionView) == true){
-            
+        if(self.isKindOfClass(UICollectionView) == true){
             let tempCollectionView :UICollectionView = self as UICollectionView
             var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
             footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
             tempCollectionView.addSubview(footView)
             tempCollectionView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, ZLSwithRefreshFootViewHeight, 0)
+        }else{
+            let scrollView :UIScrollView = self as UIScrollView
+            scrollView.addSubview(footView)
+            scrollView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0,ZLSwithRefreshFootViewHeight, 0)
         }
     }
     
@@ -132,13 +132,8 @@ extension UIScrollView: UIScrollViewDelegate {
         if refreshStatus == .LoadMore {
             
 
-            var offsetValue:CGFloat = 0
-            if (self.isKindOfClass(UITableView)){
-                offsetValue = 0
-            }else{
-                offsetValue = ZLSwithRefreshFootViewHeight
-            }
-            
+            var offsetValue:CGFloat = ZLSwithRefreshFootViewHeight
+
             if (self.dragging == false){
                 footView.title = ZLSwithRefreshFootViewText
             }
@@ -183,6 +178,8 @@ extension UIScrollView: UIScrollViewDelegate {
                 let tempCollectionView :UICollectionView = self as UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
+            }else{
+                footView.frame.origin.y = self.contentSize.height
             }
             
             return;
@@ -229,25 +226,21 @@ extension UIScrollView: UIScrollViewDelegate {
         
         // 上拉加载更多
         if (
-            (scrollView.isKindOfClass(UITableView) &&
-                scrollView.valueForKeyPath("tableFooterView") != nil) ||
+            
                 scrollViewContentOffsetY > 0
             )
+        
         {
             var nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.frame.size.height
             var tableViewMaxHeight:CGFloat = 0
             
-            if (
-                scrollView.isKindOfClass(UITableView) &&
-                    scrollView.valueForKeyPath("tableFooterView") != nil
-                )
-            {
-                tableViewMaxHeight = CGRectGetMidY(scrollView.valueForKeyPath("tableFooterView")!.frame)
-            }else if (scrollView.isKindOfClass(UICollectionView))
+            if (scrollView.isKindOfClass(UICollectionView))
             {
                 let tempCollectionView :UICollectionView = self as UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 tableViewMaxHeight = height
+            }else if(self.contentSize.height > 0){
+                tableViewMaxHeight = self.contentSize.height
             }
             
             if (self.userInteractionEnabled == true && refreshStatus == .Normal){

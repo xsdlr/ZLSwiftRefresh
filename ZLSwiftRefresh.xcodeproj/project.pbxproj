@@ -10,6 +10,7 @@
 		4807E2D91AB1C3AB00C6EC4C /* Example3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4807E2D81AB1C3AB00C6EC4C /* Example3ViewController.swift */; };
 		48D3E2531AAD7BE7000F4239 /* Example1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D3E2521AAD7BE7000F4239 /* Example1ViewController.swift */; };
 		48D3E2551AADEA7F000F4239 /* Example2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D3E2541AADEA7F000F4239 /* Example2ViewController.swift */; };
+		48F784901AB2F64900FAD274 /* Example4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F7848F1AB2F64900FAD274 /* Example4ViewController.swift */; };
 		48FD58C81AA95BC6007F7CE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58C71AA95BC6007F7CE8 /* AppDelegate.swift */; };
 		48FD58CA1AA95BC6007F7CE8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58C91AA95BC6007F7CE8 /* ViewController.swift */; };
 		48FD58CD1AA95BC6007F7CE8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48FD58CB1AA95BC6007F7CE8 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 		4807E2D81AB1C3AB00C6EC4C /* Example3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example3ViewController.swift; sourceTree = "<group>"; };
 		48D3E2521AAD7BE7000F4239 /* Example1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example1ViewController.swift; sourceTree = "<group>"; };
 		48D3E2541AADEA7F000F4239 /* Example2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example2ViewController.swift; sourceTree = "<group>"; };
+		48F7848F1AB2F64900FAD274 /* Example4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example4ViewController.swift; sourceTree = "<group>"; };
 		48FD58C21AA95BC6007F7CE8 /* ZLSwiftRefresh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZLSwiftRefresh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		48FD58C61AA95BC6007F7CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48FD58C71AA95BC6007F7CE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				48D3E2521AAD7BE7000F4239 /* Example1ViewController.swift */,
 				48D3E2541AADEA7F000F4239 /* Example2ViewController.swift */,
 				4807E2D81AB1C3AB00C6EC4C /* Example3ViewController.swift */,
+				48F7848F1AB2F64900FAD274 /* Example4ViewController.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				48D3E2551AADEA7F000F4239 /* Example2ViewController.swift in Sources */,
 				48D3E2531AAD7BE7000F4239 /* Example1ViewController.swift in Sources */,
 				48FD58C81AA95BC6007F7CE8 /* AppDelegate.swift in Sources */,
+				48F784901AB2F64900FAD274 /* Example4ViewController.swift in Sources */,
 				48FD58F71AA9A495007F7CE8 /* ZLSwiftRefreshExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

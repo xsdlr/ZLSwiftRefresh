@@ -11,29 +11,21 @@ import UIKit
 class Example3ViewController: UIViewController,UIWebViewDelegate {
 
     var webView:UIWebView = UIWebView()
-
-    var titleStr:String {
-        set {
-            self.title = newValue
-        }
-        
-        get {
-            return self.titleStr
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupUI()
-        
+        self.view.backgroundColor = UIColor.whiteColor()
         self.webView.backgroundColor = UIColor.whiteColor()
         // 下拉刷新
         self.webView.scrollView.toRefreshAction { () -> () in
             self.webView.reload()
         }
         
-     
+        self.webView.scrollView.nowRefresh { () -> () in
+            self.webView.reload()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,7 +37,7 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         var webView = UIWebView(frame: self.view.frame)
         webView.delegate = self
         self.view.addSubview(webView)
-        webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://weibo.com/makezl")!, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 10))
+        webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.baidu.com")!, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 10))
         self.webView = webView
     }
     
@@ -54,6 +46,9 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         self.webView.scrollView.doneRefresh()
     }
     
-    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+        println("网络有问题..")
+        self.webView.scrollView.doneRefresh()
+    }
     
 }

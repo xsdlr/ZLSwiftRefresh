@@ -11,15 +11,6 @@ import UIKit
 class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource {
 
     var datas:Int = 10
-    var titleStr:String {
-        set {
-            self.title = newValue
-        }
-        
-        get {
-            return self.titleStr
-        }
-    }
     
     var collectionView:UICollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
     
@@ -81,7 +72,6 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         collectionView.dataSource = self as UICollectionViewDataSource
         collectionView.delegate = self as UICollectionViewDelegate
         collectionView.backgroundColor = UIColor.whiteColor()
-        collectionView.alwaysBounceVertical = true
         self.view.addSubview(collectionView)
         self.collectionView = collectionView
     }

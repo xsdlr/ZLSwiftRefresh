@@ -58,17 +58,17 @@ class ViewController: UITableViewController {
         if indexPath.row == 0 {
             // TableView
             var example1Vc = Example1ViewController()
-            example1Vc.titleStr = self.datas[indexPath.row] as String
+            example1Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example1Vc as UIViewController, animated: true)
         }else if indexPath.row == 1{
             // collectionView
             var example2Vc = Example2ViewController()
-            example2Vc.titleStr = self.datas[indexPath.row] as String
+            example2Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example2Vc as UIViewController, animated: true)
         }else if indexPath.row == 2{
             // webView
             var example3Vc = Example3ViewController()
-            example3Vc.titleStr = self.datas[indexPath.row] as String
+            example3Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example3Vc as UIViewController, animated: true)
         }
     }
