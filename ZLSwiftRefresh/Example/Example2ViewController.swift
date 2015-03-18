@@ -21,8 +21,9 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         self.setupUI()
         
         weak var weakSelf = self as Example2ViewController
+        
         // 下拉刷新
-        collectionView.toRefreshAction { () -> () in
+        collectionView.toRefreshAction(.WawaAnimation, action: { () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("toRefreshAction success")
@@ -30,15 +31,15 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
             })
-        }
-
+        })
+        
         // 加载更多
         collectionView.toLoadMoreAction { () -> () in
             weakSelf?.delay(0.5, closure: { () -> () in})
             weakSelf?.delay(0.5, closure: { () -> () in
                 println("toLoadMoreAction success")
                 if weakSelf?.datas < 40 {
-                    weakSelf?.datas += 5//(Int)(arc4random_uniform(10)) + 1
+                    weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
                     weakSelf?.collectionView.reloadData()
                 }else {
                     // 数据加载完毕
@@ -47,9 +48,9 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
                 weakSelf?.collectionView.doneRefresh()
             })
         }
-
+        
         // 立马进去就刷新
-        collectionView.nowRefresh { () -> () in
+        collectionView.nowRefresh(.WawaAnimation, action: { () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
@@ -57,7 +58,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
             })
-        }
+        })
     }
     
     func setupUI(){

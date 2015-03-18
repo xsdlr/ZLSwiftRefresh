@@ -1,14 +1,14 @@
 //
-//  Example1ViewController.swift
+//  Example5ViewController.swift
 //  ZLSwiftRefresh
 //
-//  Created by 张磊 on 15-3-9.
+//  Created by 张磊 on 15-3-16.
 //  Copyright (c) 2015年 com.zixue101.www. All rights reserved.
 //
 
 import UIKit
 
-class Example1ViewController: UITableViewController {
+class Example5ViewController: UITableViewController {
     
     // default datas
     var datas:Int = 10
@@ -16,17 +16,17 @@ class Example1ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        weak var weakSelf = self as Example1ViewController
-
+        weak var weakSelf = self as Example5ViewController
+        
         // 下拉刷新
-        self.tableView.toRefreshAction(.WawaAnimation,{ () -> () in
+        self.tableView.toRefreshAction(.ArrowAnimation, action: { () -> Void in
+            weakSelf?.delay(0.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("toRefreshAction success")
                 weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             })
-            weakSelf?.delay(2.0, closure: { () -> () in})
         })
         
         // 上啦加载更多
@@ -42,7 +42,7 @@ class Example1ViewController: UITableViewController {
         })
         
         // 及时上拉刷新
-        self.tableView.nowRefresh(.WawaAnimation, action: { () -> Void in
+        self.tableView.nowRefresh(.ArrowAnimation, action: { () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
@@ -51,6 +51,7 @@ class Example1ViewController: UITableViewController {
                 weakSelf?.tableView.doneRefresh()
             })
         })
+        
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
@@ -65,7 +66,7 @@ class Example1ViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell
-
+        
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }

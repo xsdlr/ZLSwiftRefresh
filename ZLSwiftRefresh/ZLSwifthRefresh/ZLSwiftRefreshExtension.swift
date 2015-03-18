@@ -12,44 +12,63 @@ enum RefreshStatus{
     case Normal, Refresh, LoadMore
 }
 
+// 动画模式
+// WawaAnimation : 娃娃动画
+// ArrowAnimation : 箭头
+// 未完成 ---- 
+// Text   : 纯文字
+// TextAndTime : 纯文字+刷新时间
+// AnimationText : 娃娃动画+文字
+// AnimationTextAndTime : 娃娃动画+文字时间
+enum RefreshAnimationStatus{
+    case WawaAnimation, ArrowAnimation
+}
+
 let contentOffsetKeyPath = "contentOffset"
 let contentSizeKeyPath = "contentSize"
 var addObserverNum:NSInteger = 0;
-var headerView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectZero)
-var footView:ZLSwiftFootView = ZLSwiftFootView(frame: CGRectZero)
 
 /** refresh && loadMore callBack */
-var refreshAction: (() -> ()) = {}
-var loadMoreAction: (() -> ()) = {}
-var nowRefreshAction: (() -> ()) = {}
+var refreshAction: (() -> Void) = {}
+var loadMoreAction: (() -> Void) = {}
+var nowRefreshAction: (() -> Void) = {}
 
-var refreshTempAction:(() -> ()) = {}
-var loadMoreTempAction:(() -> ()) = {}
-var loadMoreEndTempAction:(() -> ()) = {}
+var refreshTempAction:(() -> Void) = {}
+var loadMoreTempAction:(() -> Void) = {}
+var loadMoreEndTempAction:(() -> Void) = {}
 
 var refreshStatus:RefreshStatus = .Normal
+var refreshAnimationStatus:RefreshAnimationStatus = .WawaAnimation
 let animations:CGFloat = 60.0
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
 var nowLoading:Bool = false
 var isEndLoadMore:Bool = false
 var valueOffset:CGFloat = 0
+var headerView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectZero)
+var footView:ZLSwiftFootView = ZLSwiftFootView(frame: CGRectZero)
 
 extension UIScrollView: UIScrollViewDelegate {
     
     //MARK: Refresh
     //下拉刷新
-    func toRefreshAction(action :(() -> ())){
+    func toRefreshAction(action :(() -> Void)){
         if addObserverNum > 0 {
             addObserverNum = 0;
         }
+        
         self.addOnlyAction();
         self.addHeadView()
         refreshAction = action
     }
     
+    func toRefreshAction(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
+        refreshAnimationStatus = status
+        self.toRefreshAction(action)
+    }
+    
     //MARK: LoadMore
     //上拉加载更多
-    func toLoadMoreAction(action :(() -> ())){
+    func toLoadMoreAction(action :(() -> Void)){
         self.addOnlyAction();
         self.addFootView()
         loadMoreAction = action
@@ -58,12 +77,17 @@ extension UIScrollView: UIScrollViewDelegate {
     
     //MARK: nowRefresh
     //立马上拉刷新
-    func nowRefresh(action :(() -> ())){
+    func nowRefresh(action :(() -> Void)){
         self.addOnlyAction();
         self.addHeadView()
         nowLoading = true
         nowRefreshAction = action
         self.contentOffset = CGPointMake(0, -ZLSwithRefreshHeadViewHeight - self.contentInset.top)
+    }
+    
+    func nowRefresh(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
+        refreshAnimationStatus = status
+        self.nowRefresh(action)
     }
     
     //MARK: endLoadMoreData
@@ -86,6 +110,7 @@ extension UIScrollView: UIScrollViewDelegate {
     func addHeadView(){
         var headView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
         headView.scrollView = self
+        headView.animation = refreshAnimationStatus
         self.addSubview(headView)
         headerView = headView
         
@@ -108,6 +133,17 @@ extension UIScrollView: UIScrollViewDelegate {
         }
     }
     
+    //MARK: Refresh Style in Animation.
+    func setHeaderViewAnimationStatus(status:RefreshAnimationStatus){
+        refreshAnimationStatus = status
+        headerView.animation = status
+    }
+    
+    func clearAnimation(){
+        refreshAnimationStatus = .WawaAnimation
+        headerView.animation = refreshAnimationStatus
+    }
+    
     //MARK: Observer KVO Method
     func addObserver(){
         if(addObserverNum == 0){
@@ -124,14 +160,9 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: doneRefersh
     //完成刷新
     func doneRefresh(){
-        if headerView.headImageView.isAnimating() {
-            headerView.stopAnimation()
-        }
-        
+        headerView.stopAnimation()
         self.userInteractionEnabled = true
         if refreshStatus == .LoadMore {
-            
-
             var offsetValue:CGFloat = ZLSwithRefreshFootViewHeight
 
             if (self.dragging == false){
@@ -153,8 +184,6 @@ extension UIScrollView: UIScrollViewDelegate {
                     self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue, 0)
                 })
             }
-            
-            
         }else if refreshStatus == .Refresh {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
                 self.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.contentInset.bottom, 0)
@@ -170,14 +199,18 @@ extension UIScrollView: UIScrollViewDelegate {
     }
     
     func changeSelfView(keyPath:String){
-        var scrollView = self
         
+        if (refreshAction == nil && loadMoreAction == nil && nowRefreshAction == nil) {
+            return;
+        }
+        
+        var scrollView = self
         if (keyPath == contentSizeKeyPath){
             // change contentSize
             if(self.isKindOfClass(UICollectionView) == true){
                 let tempCollectionView :UICollectionView = self as UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
+                footView.frame.origin.y = height
             }else{
                 footView.frame.origin.y = self.contentSize.height
             }
@@ -191,7 +224,7 @@ extension UIScrollView: UIScrollViewDelegate {
         if (ZLSwithRefreshHeadViewHeight > animations){
             height = animations
         }
-        if (scrollViewContentOffsetY <= -height - self.contentInset.top) {
+        if (scrollViewContentOffsetY + self.getNavigationHeight() != 0 && scrollViewContentOffsetY <= -height - self.contentInset.top) {
             // 上拉刷新
             if scrollView.dragging == false && headerView.headImageView.isAnimating() == false{
                 if refreshTempAction != nil {
@@ -214,22 +247,27 @@ extension UIScrollView: UIScrollViewDelegate {
             
         }else{
             refreshTempAction = refreshAction
+        }
+        
+        if (scrollViewContentOffsetY <= 0){
             var v:CGFloat = scrollViewContentOffsetY + self.contentInset.top
-            if (v < -animations){
-                v = animations
-            }
-            
-            if ((Int)(abs(v)) > 0){
+            if (refreshAnimationStatus == .WawaAnimation){
+                if (v < -animations){
+                    v = animations
+                }
+                
+                if ((Int)(abs(v)) > 0){
+                    headerView.imgName = "\((Int)(abs(v)))"
+                }
+            }else{
                 headerView.imgName = "\((Int)(abs(v)))"
             }
         }
-        
+    
         // 上拉加载更多
         if (
-            
                 scrollViewContentOffsetY > 0
             )
-        
         {
             var nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.frame.size.height
             var tableViewMaxHeight:CGFloat = 0

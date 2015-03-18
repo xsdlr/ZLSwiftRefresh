@@ -11,7 +11,6 @@ import UIKit
 class ZLSwiftFootView: UIView {
     
     var footLabel: UILabel = UILabel()
-
     var title:String {
         set {
             footLabel.text = newValue

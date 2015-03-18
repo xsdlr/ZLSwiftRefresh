@@ -16,16 +16,19 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         super.viewDidLoad()
         
         self.setupUI()
+        
         self.view.backgroundColor = UIColor.whiteColor()
         self.webView.backgroundColor = UIColor.whiteColor()
-        // 下拉刷新
-        self.webView.scrollView.toRefreshAction { () -> () in
-            self.webView.reload()
-        }
         
-        self.webView.scrollView.nowRefresh { () -> () in
+        // 下拉刷新
+        self.webView.scrollView.toRefreshAction(.ArrowAnimation, action: { () -> Void in
             self.webView.reload()
-        }
+        })
+        
+        self.webView.scrollView.nowRefresh(.ArrowAnimation, action: { () -> Void in
+            self.webView.reload()
+        })
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,7 +40,7 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         var webView = UIWebView(frame: self.view.frame)
         webView.delegate = self
         self.view.addSubview(webView)
-        webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.baidu.com")!, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 10))
+        webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://weibo.com/makezl")!, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 10))
         self.webView = webView
     }
     

@@ -15,7 +15,7 @@ class Example4ViewController: UIViewController {
         super.viewDidLoad()
         
         self.setupUI()
-        
+    
         self.scrollView.toRefreshAction { () -> () in
             println("toRefreshAction")
             self.delay(1.0, closure: {})
