@@ -231,7 +231,12 @@ extension UIScrollView: UIScrollViewDelegate {
                     refreshStatus = .Refresh
                     headerView.startAnimation()
                     UIView.animateWithDuration(0.25, animations: { () -> Void in
-                        scrollView.contentInset = UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight + self.contentInset.top, 0, scrollView.contentInset.bottom, 0)
+                        if self.contentInset.top == 0 {
+                            scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, scrollView.contentInset.bottom, 0)
+                        }else{
+                            scrollView.contentInset = UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight + self.contentInset.top, 0, scrollView.contentInset.bottom, 0)
+                        }
+
                     })
                     
                     if (nowLoading == true){

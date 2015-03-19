@@ -70,7 +70,7 @@ class Example1ViewController: UITableViewController {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }
         
-        cell.textLabel.text = "测试数据 - \(indexPath.row)"
+        cell.textLabel?.text = "测试数据 - \(indexPath.row)"
         
         return cell
     }

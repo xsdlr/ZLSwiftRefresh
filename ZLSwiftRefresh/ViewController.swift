@@ -50,7 +50,7 @@ class ViewController: UITableViewController {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }
         
-        cell.textLabel.text = self.datas[indexPath.row] as? String
+        cell.textLabel?.text = self.datas[indexPath.row] as? String
         
         return cell
     }
