@@ -82,7 +82,7 @@ extension UIScrollView: UIScrollViewDelegate {
         self.addHeadView()
         nowLoading = true
         nowRefreshAction = action
-        self.contentOffset = CGPointMake(0, -ZLSwithRefreshHeadViewHeight - self.contentInset.top)
+        self.contentOffset = CGPointMake(0, -ZLSwithRefreshHeadViewHeight)
     }
     
     func nowRefresh(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
@@ -108,6 +108,15 @@ extension UIScrollView: UIScrollViewDelegate {
     
     //MARK: AddHeadView && FootView
     func addHeadView(){
+        
+        if(headerView.superview != nil && headerView.superview == self){
+            return;
+        }
+        
+        if (isExistsView(headerView)){
+            return;
+        }
+        
         var headView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
         headView.scrollView = self
         headView.animation = refreshAnimationStatus
@@ -118,7 +127,16 @@ extension UIScrollView: UIScrollViewDelegate {
     
     func addFootView(){
         isEndLoadMore = false
-        footView = ZLSwiftFootView(frame: CGRectMake( 0 , self.frame.height, self.frame.size.width, ZLSwithRefreshFootViewHeight))
+        
+        if(footView.superview != nil && footView.superview == self){
+            return;
+        }
+        
+        if (isExistsView(footView)){
+            return;
+        }
+        
+        footView = ZLSwiftFootView(frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
         
         if(self.isKindOfClass(UICollectionView) == true){
             let tempCollectionView :UICollectionView = self as UICollectionView
@@ -131,6 +149,18 @@ extension UIScrollView: UIScrollViewDelegate {
             scrollView.addSubview(footView)
             scrollView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0,ZLSwithRefreshFootViewHeight, 0)
         }
+    }
+    
+    func isExistsView(view:UIView) -> Bool{
+        if ((view.superview?.isEqual(self) == true)){
+            return true
+        }
+        
+        if(view.superview == nil){
+            return false
+        }
+        
+        return isExistsView(view.superview!)
     }
     
     //MARK: Refresh Style in Animation.
@@ -193,6 +223,10 @@ extension UIScrollView: UIScrollViewDelegate {
             loadMoreAction = loadMoreEndTempAction
             loadMoreTempAction = loadMoreAction
             isEndLoadMore = false
+        }else {
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.contentInset.bottom, 0)
+            })
         }
         
         refreshStatus = .Normal
@@ -212,7 +246,13 @@ extension UIScrollView: UIScrollViewDelegate {
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 footView.frame.origin.y = height
             }else{
-                footView.frame.origin.y = self.contentSize.height
+                if (self.contentSize.height == 0){
+                    footView.removeFromSuperview()
+                }else if(self.contentSize.height < self.frame.size.height){
+                    footView.frame.origin.y = self.frame.size.height - footView.frame.height
+                }else{
+                    footView.frame.origin.y = self.contentSize.height
+                }
             }
             
             return;
@@ -257,7 +297,7 @@ extension UIScrollView: UIScrollViewDelegate {
         if (scrollViewContentOffsetY <= 0){
             var v:CGFloat = scrollViewContentOffsetY + self.contentInset.top
             if (refreshAnimationStatus == .WawaAnimation){
-                if (v < -animations){
+                if (v < -animations || v > animations){
                     v = animations
                 }
                 

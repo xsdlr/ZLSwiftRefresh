@@ -12,12 +12,12 @@ class Example1ViewController: UITableViewController {
     
     // default datas
     var datas:Int = 10
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         weak var weakSelf = self as Example1ViewController
-
+        
         // 下拉刷新
         self.tableView.toRefreshAction(.WawaAnimation,{ () -> () in
             weakSelf?.delay(2.0, closure: { () -> () in
@@ -51,6 +51,11 @@ class Example1ViewController: UITableViewController {
                 weakSelf?.tableView.doneRefresh()
             })
         })
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
@@ -73,6 +78,10 @@ class Example1ViewController: UITableViewController {
         cell.textLabel?.text = "测试数据 - \(indexPath.row)"
         
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.navigationController?.pushViewController(Example5ViewController(), animated: true)
     }
     
     func delay(delay:Double, closure:()->()) {

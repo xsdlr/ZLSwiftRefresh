@@ -42,5 +42,10 @@ class ZLSwiftFootView: UIView {
         self.addSubview(footTitleLabel)
         footLabel = footTitleLabel
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+    }
 
 }
