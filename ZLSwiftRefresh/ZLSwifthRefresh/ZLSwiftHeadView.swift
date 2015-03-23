@@ -12,8 +12,11 @@ var KVOContext = ""
 
 public class ZLSwiftHeadView: UIView {
     private var headLabel: UILabel = UILabel()
-    private var headImageView : UIImageView = UIImageView()
+    var headImageView : UIImageView = UIImageView()
     var scrollView:UIScrollView = UIScrollView()
+    var customAnimation:Bool = false
+    var pullImages:[UIImage] = [UIImage]()
+    
     var nowLoading:Bool = false{
         willSet {
             if (newValue == true){
@@ -43,33 +46,13 @@ public class ZLSwiftHeadView: UIView {
         super.init(coder: aDecoder)
     }
     
-    var animation:RefreshAnimationStatus = .WawaAnimation {
-        willSet{
-            if (newValue == .WawaAnimation){
-                self.headLabel.hidden = true
-            }else if(newValue == .ArrowAnimation){
-                self.headImageView.hidden = true
-                self.headLabel.hidden = false
-            }
-        }
-        
-    }
-    
     var imgName:String {
         set {
-            if(self.animation == .WawaAnimation){
+            if(!self.customAnimation){
                 self.headImageView.image = UIImage(named: "dropdown_anim__000\(newValue)")
-            }else if(self.animation == .ArrowAnimation){
-                self.headImageView.image = UIImage(named: "arrow")
-                if (CGFloat(newValue.toInt()!) > self.frame.size.height * 0.8){
-                    UIView.animateWithDuration(0.25, animations: { () -> Void in
-                        self.headImageView.transform = CGAffineTransformMakeRotation(CGFloat( M_PI))
-                    })
-                }else{
-                    UIView.animateWithDuration(0.25, animations: { () -> Void in
-                        self.headImageView.transform = CGAffineTransformIdentity;
-                    })
-                }
+            }else{
+                var image = self.pullImages[newValue.toInt()!]
+                self.headImageView.image = image
             }
         }
         
@@ -87,6 +70,7 @@ public class ZLSwiftHeadView: UIView {
         self.headImageView = headImageView
         
         var headLabel:UILabel = UILabel(frame: self.frame)
+        headLabel.text = ZLSwithRefreshHeadViewText
         headLabel.textAlignment = .Center
         headLabel.clipsToBounds = true;
         self.addSubview(headLabel)
@@ -94,40 +78,33 @@ public class ZLSwiftHeadView: UIView {
     }
 
     func startAnimation(){
-        
-        if (self.animation == .ArrowAnimation){
-            self.headLabel.hidden = false
-            self.headImageView.hidden = true
-            self.headLabel.text = "正在为您加载中.."
-        }else if(self.animation == .WawaAnimation){
+        if (!self.customAnimation){
             var results:[AnyObject] = []
-            
             for i in 1..<4{
                 if let image = UIImage(named: "dropdown_loading_0\(i).png") {
                     results.append(image)
                 }
             }
-            
+            self.headLabel.text = ZLSwithRefreshLoadingText
             self.headImageView.animationImages = results as [AnyObject]?
-            self.headImageView.animationDuration = 0.6;
-            self.headImageView.animationRepeatCount = 0;
-            self.headImageView.startAnimating()
         }
         
+        if (self.customAnimation){
+            var duration:Double = Double(self.pullImages.count) * 0.1
+            self.headImageView.animationDuration = duration
+        }else{
+            self.headImageView.animationDuration = 0.6
+        }
+        self.headImageView.animationRepeatCount = 0
+        self.headImageView.startAnimating()
     }
     
     func stopAnimation(){
         
+        self.headLabel.text = ZLSwithRefreshHeadViewText
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
         })
-        
-        if (self.animation == .ArrowAnimation){
-            self.headLabel.hidden = true
-            self.headImageView.hidden = false
-        }else if(self.animation == .WawaAnimation){
-            self.headLabel.hidden = true
-        }
         
         self.headImageView.stopAnimating()
     }
@@ -135,9 +112,10 @@ public class ZLSwiftHeadView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        headImageView.frame = CGRectMake((self.frame.size.width - 50) * 0.5, -self.scrollView.frame.origin.y, 50, self.frame.size.height)
-        headLabel.frame = self.frame
+        headLabel.frame = CGRectMake((self.frame.size.width - 150) / 2, 0, 150, self.frame.size.height)
         headLabel.center = CGPointMake(self.frame.size.width * 0.5, self.frame.size.height * 0.5)
+        
+        headImageView.frame = CGRectMake(headLabel.frame.origin.x - 50 - 10, -self.scrollView.frame.origin.y, 50, self.frame.size.height)
     }
     
     public override func willMoveToSuperview(newSuperview: UIView!) {
@@ -162,8 +140,10 @@ public class ZLSwiftHeadView: UIView {
         if (ZLSwithRefreshHeadViewHeight > animations){
             height = animations
         }
-        if (scrollViewContentOffsetY + self.getNavigationHeight() != 0 && scrollViewContentOffsetY <= -height - scrollView.contentInset.top) {
+        
+        if (scrollViewContentOffsetY + self.getNavigationHeight() != 0 && scrollViewContentOffsetY <= -height - scrollView.contentInset.top + 20) {
             // 上拉刷新
+            self.headLabel.text = ZLSwithRefreshRecoderText
             if scrollView.dragging == false && self.headImageView.isAnimating() == false{
                 if refreshTempAction != nil {
                     refreshStatus = .Refresh
@@ -189,13 +169,26 @@ public class ZLSwiftHeadView: UIView {
             }
             
         }else{
+            // 上拉刷新
+            if (!self.headImageView.isAnimating()){
+                self.headLabel.text = ZLSwithRefreshHeadViewText
+            }
             refreshTempAction = self.action
         }
         
         if (scrollViewContentOffsetY <= 0){
             var v:CGFloat = scrollViewContentOffsetY + scrollView.contentInset.top
-            if (v < -animations || v > animations){
+            if ((!self.customAnimation) && (v < -animations || v > animations)){
                 v = animations
+            }
+            
+            
+            if (self.customAnimation){
+                v *= CGFloat(CGFloat(self.pullImages.count) / ZLSwithRefreshHeadViewHeight)
+                
+                if (Int(abs(v)) > self.pullImages.count - 1){
+                    v = CGFloat(self.pullImages.count - 1);
+                }
             }
             
             if ((Int)(abs(v)) > 0){

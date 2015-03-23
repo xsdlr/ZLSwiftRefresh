@@ -39,7 +39,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         }
         
         // 立马进去就刷新
-        collectionView.nowRefresh(.WawaAnimation, action: { () -> Void in
+        collectionView.nowRefresh({ () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")

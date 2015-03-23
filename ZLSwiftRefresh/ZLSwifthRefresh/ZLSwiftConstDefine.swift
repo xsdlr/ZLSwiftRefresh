@@ -23,5 +23,6 @@ let ZLSwithRefreshFootViewText = "上拉加载更多"
 let ZLSwithRefreshMessageText  = "已经加载完"
 let ZLSwithRefreshSuccessText  = "刷新成功"
 let ZLSwithRefreshFailurText   = "刷新失败"
-let ZLSwithRefreshLoadingText  = "正在加载..."
+let ZLSwithRefreshLoadingText  = "正在为您加载中..."
+let ZLSwithRefreshRecoderText  = "松开刷新.."
 

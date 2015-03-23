@@ -12,41 +12,32 @@ enum RefreshStatus{
     case Normal, Refresh, LoadMore
 }
 
-// 动画模式
-// WawaAnimation : 娃娃动画
-// ArrowAnimation : 箭头
-// 未完成 ---- 
-// Text   : 纯文字
-// TextAndTime : 纯文字+刷新时间
-// AnimationText : 娃娃动画+文字
-// AnimationTextAndTime : 娃娃动画+文字时间
-enum RefreshAnimationStatus{
-    case WawaAnimation, ArrowAnimation
+enum HeaderViewRefreshAnimationStatus{
+    case headerViewRefreshPullAnimation, headerViewRefreshLoadingAnimation
 }
 
 var refreshStatus:RefreshStatus = .Normal
-var refreshAnimationStatus:RefreshAnimationStatus = .WawaAnimation
 let animations:CGFloat = 60.0
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
 
 extension UIScrollView: UIScrollViewDelegate {
     
+    public var headerRefreshView: ZLSwiftHeadView? {
+        get {
+            var headerRefreshView = viewWithTag(ZLSwiftHeadViewTag)
+            return headerRefreshView as? ZLSwiftHeadView
+        }
+    }
+    
     //MARK: Refresh
     //下拉刷新
     func toRefreshAction(action :(() -> Void)){
-        self.toRefreshAction(.WawaAnimation, action: action)
-    }
-    
-    func toRefreshAction(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
-        refreshAnimationStatus = status
         
-        if var headView = self.viewWithTag(ZLSwiftHeadViewTag) {
-            
-        }else{
+        self.alwaysBounceVertical = true
+        if self.headerRefreshView == nil{
             var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: action,frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
             headView.scrollView = self
             headView.tag = ZLSwiftHeadViewTag
-            headView.animation = refreshAnimationStatus
             self.addSubview(headView)
         }
     }
@@ -62,20 +53,29 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: nowRefresh
     //立马上拉刷新
     func nowRefresh(action :(() -> Void)){
-        var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: action,frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
-        headView.scrollView = self
-        headView.tag = ZLSwiftHeadViewTag
-        headView.animation = refreshAnimationStatus
-        headView.nowLoading = true
-        headView.nowAction = action
         
-        self.addSubview(headView)
-        
-    }
-    
-    func nowRefresh(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
         self.alwaysBounceVertical = true
-        self.nowRefresh(action)
+        if self.headerRefreshView == nil {
+            var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: action,frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
+            headView.scrollView = self
+            headView.tag = ZLSwiftHeadViewTag
+            self.addSubview(headView)
+        }
+        
+        self.headerRefreshView?.nowLoading = true
+        self.headerRefreshView?.nowAction = action
+    }
+
+    func headerViewRefreshAnimationStatus(status:HeaderViewRefreshAnimationStatus, images:[UIImage]){
+        
+        self.headerRefreshView?.customAnimation = true
+        
+        if (status == .headerViewRefreshLoadingAnimation){
+            self.headerRefreshView?.headImageView.animationImages = images
+        }else{
+            self.headerRefreshView?.pullImages = images
+        }
+        
     }
     
     //MARK: endLoadMoreData

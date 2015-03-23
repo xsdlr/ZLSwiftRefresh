@@ -22,17 +22,6 @@ class Example1ViewController: UITableViewController {
         
         weak var weakSelf = self as Example1ViewController
         
-        // 下拉刷新
-//        self.tableView.toRefreshAction(.WawaAnimation,{ () -> () in
-//            weakSelf?.delay(2.0, closure: { () -> () in
-//                println("toRefreshAction success")
-//                weakSelf?.datas += 20
-//                weakSelf?.tableView.reloadData()
-//                weakSelf?.tableView.doneRefresh()
-//            })
-//            weakSelf?.delay(2.0, closure: { () -> () in})
-//        })
-        
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
             println("toLoadMoreAction success")
@@ -46,7 +35,7 @@ class Example1ViewController: UITableViewController {
         })
 
         // 及时上拉刷新
-        self.tableView.nowRefresh(.WawaAnimation, action: { () -> Void in
+        self.tableView.nowRefresh({ () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")

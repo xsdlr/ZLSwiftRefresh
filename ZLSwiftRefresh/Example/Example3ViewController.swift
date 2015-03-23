@@ -20,7 +20,7 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         self.view.backgroundColor = UIColor.whiteColor()
         self.webView.backgroundColor = UIColor.whiteColor()
         
-        self.webView.scrollView.nowRefresh(.WawaAnimation, action: { () -> Void in
+        self.webView.scrollView.nowRefresh({
             self.webView.reload()
         })
         
