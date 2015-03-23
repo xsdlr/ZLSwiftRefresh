@@ -24,362 +24,74 @@ enum RefreshAnimationStatus{
     case WawaAnimation, ArrowAnimation
 }
 
-let contentOffsetKeyPath = "contentOffset"
-let contentSizeKeyPath = "contentSize"
-var addObserverNum:NSInteger = 0;
-
-/** refresh && loadMore callBack */
-var refreshAction: (() -> Void) = {}
-var loadMoreAction: (() -> Void) = {}
-var nowRefreshAction: (() -> Void) = {}
-
-var refreshTempAction:(() -> Void) = {}
-var loadMoreTempAction:(() -> Void) = {}
-var loadMoreEndTempAction:(() -> Void) = {}
-
 var refreshStatus:RefreshStatus = .Normal
 var refreshAnimationStatus:RefreshAnimationStatus = .WawaAnimation
 let animations:CGFloat = 60.0
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
-var nowLoading:Bool = false
-var isEndLoadMore:Bool = false
-var valueOffset:CGFloat = 0
-var headerView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectZero)
-var footView:ZLSwiftFootView = ZLSwiftFootView(frame: CGRectZero)
 
 extension UIScrollView: UIScrollViewDelegate {
     
     //MARK: Refresh
     //下拉刷新
     func toRefreshAction(action :(() -> Void)){
-        if addObserverNum > 0 {
-            addObserverNum = 0;
-        }
-        
-        self.addOnlyAction();
-        self.addHeadView()
-        refreshAction = action
+        self.toRefreshAction(.WawaAnimation, action: action)
     }
     
     func toRefreshAction(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
         refreshAnimationStatus = status
-        self.toRefreshAction(action)
+        
+        if var headView = self.viewWithTag(ZLSwiftHeadViewTag) {
+            
+        }else{
+            var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: action,frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
+            headView.scrollView = self
+            headView.tag = ZLSwiftHeadViewTag
+            headView.animation = refreshAnimationStatus
+            self.addSubview(headView)
+        }
     }
     
     //MARK: LoadMore
     //上拉加载更多
     func toLoadMoreAction(action :(() -> Void)){
-        self.addOnlyAction();
-        self.addFootView()
-        loadMoreAction = action
-        loadMoreEndTempAction = action
+        var footView = ZLSwiftFootView(action: action, frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
+        footView.tag = ZLSwiftFootViewTag
+        self.addSubview(footView)
     }
     
     //MARK: nowRefresh
     //立马上拉刷新
     func nowRefresh(action :(() -> Void)){
-        self.addOnlyAction();
-        self.addHeadView()
-        nowLoading = true
-        nowRefreshAction = action
-        self.contentOffset = CGPointMake(0, -ZLSwithRefreshHeadViewHeight)
+        var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: action,frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
+        headView.scrollView = self
+        headView.tag = ZLSwiftHeadViewTag
+        headView.animation = refreshAnimationStatus
+        headView.nowLoading = true
+        headView.nowAction = action
+        
+        self.addSubview(headView)
+        
     }
     
     func nowRefresh(_ status: RefreshAnimationStatus = .WawaAnimation , action :(() -> Void)){
-        refreshAnimationStatus = status
+        self.alwaysBounceVertical = true
         self.nowRefresh(action)
     }
     
     //MARK: endLoadMoreData
     //数据加载完毕
     func endLoadMoreData() {
-        isEndLoadMore = true
-        loadMoreAction = {}
-        loadMoreTempAction = {}
-        footView.title = ZLSwithRefreshMessageText
-    }
-    
-    //配置信息
-    func addOnlyAction(){
-        self.addObserver()
-        self.alwaysBounceVertical = true
-        tableViewOriginContentInset = self.contentInset
-    }
-    
-    //MARK: AddHeadView && FootView
-    func addHeadView(){
-        
-        if(headerView.superview != nil && headerView.superview == self){
-            return;
-        }
-        
-        if (isExistsView(headerView)){
-            return;
-        }
-        
-        var headView:ZLSwiftHeadView = ZLSwiftHeadView(frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
-        headView.scrollView = self
-        headView.animation = refreshAnimationStatus
-        self.addSubview(headView)
-        headerView = headView
-        
-    }
-    
-    func addFootView(){
-        isEndLoadMore = false
-        
-        if(footView.superview != nil && footView.superview == self){
-            return;
-        }
-        
-        if (isExistsView(footView)){
-            return;
-        }
-        
-        footView = ZLSwiftFootView(frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
-        
-        if(self.isKindOfClass(UICollectionView) == true){
-            let tempCollectionView :UICollectionView = self as UICollectionView
-            var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-            footView.frame.origin.y = height + ZLSwithRefreshFootViewHeight / 2
-            tempCollectionView.addSubview(footView)
-            tempCollectionView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, ZLSwithRefreshFootViewHeight, 0)
-        }else{
-            let scrollView :UIScrollView = self as UIScrollView
-            scrollView.addSubview(footView)
-            scrollView.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0,ZLSwithRefreshFootViewHeight, 0)
-        }
-    }
-    
-    func isExistsView(view:UIView) -> Bool{
-        if ((view.superview?.isEqual(self) == true)){
-            return true
-        }
-        
-        if(view.superview == nil){
-            return false
-        }
-        
-        return isExistsView(view.superview!)
-    }
-    
-    //MARK: Refresh Style in Animation.
-    func setHeaderViewAnimationStatus(status:RefreshAnimationStatus){
-        refreshAnimationStatus = status
-        headerView.animation = status
-    }
-    
-    func clearAnimation(){
-        refreshAnimationStatus = .WawaAnimation
-        headerView.animation = refreshAnimationStatus
-    }
-    
-    //MARK: Observer KVO Method
-    func addObserver(){
-        if(addObserverNum == 0){
-            self.addObserver(self, forKeyPath: contentOffsetKeyPath, options: .Initial, context: nil)
-            self.addObserver(self, forKeyPath: contentSizeKeyPath, options: .Initial, context: nil)
-        }
-        addObserverNum+=1
-    }
-    
-    public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        self.changeSelfView(keyPath)
+        var footView:ZLSwiftFootView = self.viewWithTag(ZLSwiftFootViewTag) as ZLSwiftFootView
+        footView.isEndLoadMore = true
     }
     
     //MARK: doneRefersh
     //完成刷新
     func doneRefresh(){
-        headerView.stopAnimation()
-        self.userInteractionEnabled = true
-        if refreshStatus == .LoadMore {
-            var offsetValue:CGFloat = ZLSwithRefreshFootViewHeight
-
-            if (self.dragging == false){
-                footView.title = ZLSwithRefreshFootViewText
-            }
-            
-            if (self.isKindOfClass(UICollectionView)) {
-                UIView.animateWithDuration(0.25, animations: { () -> Void in
-                    self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue + ZLSwithRefreshFootViewHeight + ZLSwithRefreshFootViewHeight / 2, 0)
-                })
-                
-                // footView必须超过了屏幕才进行计算
-                if (
-                    footView.frame.origin.y - footView.frame.height * 2 > self.frame.height && self.contentOffset.y + self.frame.height < footView.frame.origin.y + footView.frame.height ){
-                    self.contentOffset.y = self.contentOffset.y - ZLSwithRefreshFootViewHeight
-                }
-            }else{
-                UIView.animateWithDuration(0.25, animations: { () -> Void in
-                    self.contentInset = UIEdgeInsetsMake(self.contentInset.top, 0, offsetValue, 0)
-                })
-            }
-        }else if refreshStatus == .Refresh {
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.contentInset.bottom, 0)
-            })
-            
-            // Reset LoadMore status
-            loadMoreAction = loadMoreEndTempAction
-            loadMoreTempAction = loadMoreAction
-            isEndLoadMore = false
-        }else {
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.contentInset.bottom, 0)
-            })
+        if var headerView:ZLSwiftHeadView = self.viewWithTag(ZLSwiftHeadViewTag) as? ZLSwiftHeadView {
+            headerView.stopAnimation()
         }
-        
         refreshStatus = .Normal
-    }
-    
-    func changeSelfView(keyPath:String){
-        
-        if (refreshAction == nil && loadMoreAction == nil && nowRefreshAction == nil) {
-            return;
-        }
-        
-        var scrollView = self
-        if (keyPath == contentSizeKeyPath){
-            // change contentSize
-            if(self.isKindOfClass(UICollectionView) == true){
-                let tempCollectionView :UICollectionView = self as UICollectionView
-                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                footView.frame.origin.y = height
-            }else{
-                if (self.contentSize.height == 0){
-                    footView.removeFromSuperview()
-                }else if(self.contentSize.height < self.frame.size.height){
-                    footView.frame.origin.y = self.frame.size.height - footView.frame.height
-                }else{
-                    footView.frame.origin.y = self.contentSize.height
-                }
-            }
-            
-            return;
-        }
-        
-        // change contentOffset
-        var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
-        var height = ZLSwithRefreshHeadViewHeight
-        if (ZLSwithRefreshHeadViewHeight > animations){
-            height = animations
-        }
-        if (scrollViewContentOffsetY + self.getNavigationHeight() != 0 && scrollViewContentOffsetY <= -height - self.contentInset.top) {
-            // 上拉刷新
-            if scrollView.dragging == false && headerView.headImageView.isAnimating() == false{
-                if refreshTempAction != nil {
-                    refreshStatus = .Refresh
-                    headerView.startAnimation()
-                    UIView.animateWithDuration(0.25, animations: { () -> Void in
-                        if self.contentInset.top == 0 {
-                            scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, scrollView.contentInset.bottom, 0)
-                        }else{
-                            scrollView.contentInset = UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight + self.contentInset.top, 0, scrollView.contentInset.bottom, 0)
-                        }
-
-                    })
-                    
-                    if (nowLoading == true){
-                        nowRefreshAction()
-                        nowRefreshAction = {}
-                        nowLoading = false
-                    }else{
-                        refreshTempAction()
-                        refreshTempAction = {}
-                    }
-                }
-            }
-            
-        }else{
-            refreshTempAction = refreshAction
-        }
-        
-        if (scrollViewContentOffsetY <= 0){
-            var v:CGFloat = scrollViewContentOffsetY + self.contentInset.top
-            if (refreshAnimationStatus == .WawaAnimation){
-                if (v < -animations || v > animations){
-                    v = animations
-                }
-                
-                if ((Int)(abs(v)) > 0){
-                    headerView.imgName = "\((Int)(abs(v)))"
-                }
-            }else{
-                headerView.imgName = "\((Int)(abs(v)))"
-            }
-        }
-    
-        // 上拉加载更多
-        if (
-                scrollViewContentOffsetY > 0
-            )
-        {
-            var nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.frame.size.height
-            var tableViewMaxHeight:CGFloat = 0
-            
-            if (scrollView.isKindOfClass(UICollectionView))
-            {
-                let tempCollectionView :UICollectionView = self as UICollectionView
-                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
-                tableViewMaxHeight = height
-            }else if(self.contentSize.height > 0){
-                tableViewMaxHeight = self.contentSize.height
-            }
-            
-            if (self.userInteractionEnabled == true && refreshStatus == .Normal){
-                loadMoreTempAction = loadMoreAction
-            }
-            
-            if (nowContentOffsetY - tableViewMaxHeight) > valueOffset && self.contentOffset.y != 0{
-                if refreshStatus == .Normal {
-                    if isEndLoadMore == false && loadMoreTempAction != nil{
-                        refreshStatus = .LoadMore
-                        footView.title = ZLSwithRefreshLoadingText
-                        loadMoreTempAction()
-                        loadMoreTempAction = {}
-                    }else {
-                        footView.title = ZLSwithRefreshMessageText
-                    }
-                }
-            }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
-                loadMoreTempAction = loadMoreAction
-                footView.title = ZLSwithRefreshFootViewText
-            }
-        }else if (refreshStatus != .LoadMore && isEndLoadMore == false){
-            footView.title = ZLSwithRefreshFootViewText
-        }
-    }
-    
-    //MARK: getNavigaition Height -> delete
-    func getNavigationHeight() -> CGFloat{
-        var vc = UIViewController()
-        if self.getViewControllerWithView(self).isKindOfClass(UIViewController) == true {
-            vc = self.getViewControllerWithView(self) as UIViewController
-        }
-        
-        var top = vc.navigationController?.navigationBar.frame.height
-        if top == nil{
-            top = 0
-        }
-        // iOS7
-        var offset:CGFloat = 20
-        if((UIDevice.currentDevice().systemVersion as NSString).floatValue < 7.0){
-            offset = 0
-        }
-
-        return offset + top!
-    }
-    
-    func getViewControllerWithView(vcView:UIView) -> AnyObject{
-        if( (vcView.nextResponder()?.isKindOfClass(UIViewController) ) == true){
-            return vcView.nextResponder() as UIViewController
-        }
-        
-        if(vcView.superview == nil){
-            return vcView
-        }
-        
-        return self.getViewControllerWithView(vcView.superview!)
     }
     
 }

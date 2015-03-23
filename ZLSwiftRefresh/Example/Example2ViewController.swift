@@ -22,17 +22,6 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         
         weak var weakSelf = self as Example2ViewController
         
-        // 下拉刷新
-        collectionView.toRefreshAction(.WawaAnimation, action: { () -> Void in
-            weakSelf?.delay(2.0, closure: { () -> () in})
-            weakSelf?.delay(2.0, closure: { () -> () in
-                println("toRefreshAction success")
-                weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
-                weakSelf?.collectionView.reloadData()
-                weakSelf?.collectionView.doneRefresh()
-            })
-        })
-        
         // 加载更多
         collectionView.toLoadMoreAction { () -> () in
             weakSelf?.delay(0.5, closure: { () -> () in})

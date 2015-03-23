@@ -8,8 +8,15 @@
 
 import UIKit
 
+
+let ZLSwiftHeadViewTag = 101
+let ZLSwiftFootViewTag = 102
+
+let contentOffsetKeyPath = "contentOffset"
+let contentSizeKeyPath = "contentSize"
+
 /** public params config */
-let ZLSwithRefreshHeadViewHeight:CGFloat = 80
+let ZLSwithRefreshHeadViewHeight:CGFloat = 60
 let ZLSwithRefreshFootViewHeight:CGFloat = 40
 let ZLSwithRefreshHeadViewText = "下拉加载刷新"
 let ZLSwithRefreshFootViewText = "上拉加载更多"

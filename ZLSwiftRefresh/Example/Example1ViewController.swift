@@ -15,19 +15,23 @@ class Example1ViewController: UITableViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         weak var weakSelf = self as Example1ViewController
         
         // 下拉刷新
-        self.tableView.toRefreshAction(.WawaAnimation,{ () -> () in
-            weakSelf?.delay(2.0, closure: { () -> () in
-                println("toRefreshAction success")
-                weakSelf?.datas += 20
-                weakSelf?.tableView.reloadData()
-                weakSelf?.tableView.doneRefresh()
-            })
-            weakSelf?.delay(2.0, closure: { () -> () in})
-        })
+//        self.tableView.toRefreshAction(.WawaAnimation,{ () -> () in
+//            weakSelf?.delay(2.0, closure: { () -> () in
+//                println("toRefreshAction success")
+//                weakSelf?.datas += 20
+//                weakSelf?.tableView.reloadData()
+//                weakSelf?.tableView.doneRefresh()
+//            })
+//            weakSelf?.delay(2.0, closure: { () -> () in})
+//        })
         
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
@@ -40,7 +44,7 @@ class Example1ViewController: UITableViewController {
                 weakSelf?.tableView.endLoadMoreData()
             }
         })
-        
+
         // 及时上拉刷新
         self.tableView.nowRefresh(.WawaAnimation, action: { () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
@@ -51,11 +55,7 @@ class Example1ViewController: UITableViewController {
                 weakSelf?.tableView.doneRefresh()
             })
         })
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
@@ -81,7 +81,7 @@ class Example1ViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.navigationController?.pushViewController(Example5ViewController(), animated: true)
+        self.navigationController?.pushViewController(Example1ViewController(), animated: true)
     }
     
     func delay(delay:Double, closure:()->()) {

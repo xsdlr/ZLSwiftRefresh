@@ -8,9 +8,21 @@
 
 import UIKit
 
-class ZLSwiftFootView: UIView {
+public class ZLSwiftFootView: UIView {
     
+    var scrollView:UIScrollView = UIScrollView()
     var footLabel: UILabel = UILabel()
+    
+    var loadMoreAction: (() -> Void) = {}
+    var loadMoreTempAction:(() -> Void) = {}
+    var loadMoreEndTempAction:(() -> Void) = {}
+    
+    var isEndLoadMore:Bool = false{
+        willSet{
+            self.footLabel.text = ZLSwithRefreshMessageText
+            self.isEndLoadMore = newValue
+        }
+    }
     var title:String {
         set {
             footLabel.text = newValue
@@ -21,16 +33,19 @@ class ZLSwiftFootView: UIView {
         }
     }
     
+    convenience init(action: (() -> ()), frame: CGRect){
+        self.init(frame: frame)
+        self.loadMoreAction = action
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         self.backgroundColor = UIColor(red: 222.0/255.0, green: 222.0/255.0, blue: 222.0/255.0, alpha: 1.0)
         self.setupUI()
         
     }
     
-    required init(coder aDecoder: NSCoder) {
-        
+    public required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         // Currently it is not supported to load view from nib
     }
@@ -43,9 +58,94 @@ class ZLSwiftFootView: UIView {
         footLabel = footTitleLabel
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    public override func willMoveToSuperview(newSuperview: UIView!) {
         
+        superview?.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &KVOContext)
+        superview?.removeObserver(self, forKeyPath: contentSizeKeyPath, context: &KVOContext)
+        if (newSuperview != nil && newSuperview.isKindOfClass(UIScrollView)) {
+            self.scrollView = newSuperview as UIScrollView
+            
+            self.scrollView.contentInset = UIEdgeInsetsMake(self.scrollView.contentInset.top, self.scrollView.contentInset.left, self.scrollView.contentInset.bottom + self.frame.height + self.frame.height * 0.5 + self.scrollView.frame.origin.y, self.scrollView.contentInset.right)
+            
+            newSuperview.addObserver(self, forKeyPath: contentOffsetKeyPath, options: .Initial, context: &KVOContext)
+            newSuperview.addObserver(self, forKeyPath: contentSizeKeyPath, options: .Initial, context: &KVOContext)
+        }
     }
+    
+    //MARK: KVO methods
+    public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<()>) {
+        
+        if (self.loadMoreAction == nil) {
+            return;
+        }
+        
+        var scrollView:UIScrollView = self.scrollView
+        if (keyPath == contentSizeKeyPath){
+            // change contentSize
+            if(scrollView.isKindOfClass(UICollectionView) == true){
+                let tempCollectionView :UICollectionView = scrollView as UICollectionView
+                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                self.frame.origin.y = height
+            }else{
+                if (self.scrollView.contentSize.height == 0){
+                    self.removeFromSuperview()
+                }else if(scrollView.contentSize.height < self.frame.size.height){
+                    self.frame.origin.y = self.scrollView.frame.size.height - self.frame.height
+                }else{
+                    self.frame.origin.y = scrollView.contentSize.height
+                }
+            }
+            
+            self.frame.origin.y += ZLSwithRefreshFootViewHeight * 0.5
 
+            return;
+        }
+
+        // change contentOffset
+        var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
+        var height = ZLSwithRefreshHeadViewHeight
+        if (ZLSwithRefreshHeadViewHeight > animations){
+            height = animations
+        }
+        
+        // 上拉加载更多
+        if (
+            scrollViewContentOffsetY > 0
+            )
+        {
+            var nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.scrollView.frame.size.height
+            var tableViewMaxHeight:CGFloat = 0
+            
+            if (scrollView.isKindOfClass(UICollectionView))
+            {
+                let tempCollectionView :UICollectionView = scrollView as UICollectionView
+                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                tableViewMaxHeight = height
+            }else if(scrollView.contentSize.height > 0){
+                tableViewMaxHeight = scrollView.contentSize.height
+            }
+            
+            if (refreshStatus == .Normal){
+                loadMoreTempAction = loadMoreAction
+            }
+            
+            if (nowContentOffsetY - tableViewMaxHeight) > 0 && scrollView.contentOffset.y != 0{
+                if isEndLoadMore == false && refreshStatus == .Normal {
+                    if loadMoreTempAction != nil{
+                        refreshStatus = .LoadMore
+                        self.title = ZLSwithRefreshLoadingText
+                        loadMoreTempAction()
+                        loadMoreTempAction = {}
+                    }else {
+                        self.title = ZLSwithRefreshMessageText
+                    }
+                }
+            }else if (isEndLoadMore == false){
+                loadMoreTempAction = loadMoreAction
+                self.title = ZLSwithRefreshFootViewText
+            }
+        }else if (isEndLoadMore == false){
+            self.title = ZLSwithRefreshFootViewText
+        }
+    }
 }
