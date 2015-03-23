@@ -112,10 +112,10 @@ public class ZLSwiftHeadView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        headLabel.frame = CGRectMake((self.frame.size.width - 150) / 2, 0, 150, self.frame.size.height)
-        headLabel.center = CGPointMake(self.frame.size.width * 0.5, self.frame.size.height * 0.5)
-        
+
+        headLabel.center = CGPointMake(self.frame.size.width * 0.5, self.scrollView.frame.origin.y * 0.5)
         headImageView.frame = CGRectMake(headLabel.frame.origin.x - 50 - 10, -self.scrollView.frame.origin.y, 50, self.frame.size.height)
+        headLabel.frame = CGRectMake((self.frame.size.width - 150) / 2, headImageView.frame.origin.y, 150, self.frame.size.height)
     }
     
     public override func willMoveToSuperview(newSuperview: UIView!) {

@@ -1,5 +1,16 @@
 # ZLSwiftRefresh
-![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/screenhot3.gif)
+
+#### UITableView Refresh
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo1.gif)
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo2.gif)
+
+#### UICollectionView/UIWebView
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo3.gif)
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo4.gif)
+
+#### Custom Animation View(自定义动画View)
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo5.gif)
+
 
 This is Swift UITableView/CollectionView pull Refresh Lib.
 -------
