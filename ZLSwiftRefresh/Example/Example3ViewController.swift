@@ -21,7 +21,9 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         self.webView.backgroundColor = UIColor.whiteColor()
         
         self.webView.scrollView.nowRefresh({
-            self.webView.reload()
+            if self.webView.loading == false{
+                self.webView.reload()
+            }
         })
         
     }

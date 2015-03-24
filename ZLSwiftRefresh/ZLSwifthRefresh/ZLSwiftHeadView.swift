@@ -21,7 +21,7 @@ public class ZLSwiftHeadView: UIView {
         willSet {
             if (newValue == true){
                 self.nowLoading = newValue
-                self.scrollView.contentInset = UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight, 0, self.scrollView.contentInset.bottom, 0)
+                self.scrollView.contentOffset = CGPointMake(0, -ZLSwithRefreshHeadViewHeight)//UIEdgeInsetsMake(ZLSwithRefreshHeadViewHeight, 0, self.scrollView.contentInset.bottom, 0)
             }
         }
     }
@@ -85,9 +85,10 @@ public class ZLSwiftHeadView: UIView {
                     results.append(image)
                 }
             }
-            self.headLabel.text = ZLSwithRefreshLoadingText
             self.headImageView.animationImages = results as [AnyObject]?
         }
+        
+        self.headLabel.text = ZLSwithRefreshLoadingText
         
         if (self.customAnimation){
             var duration:Double = Double(self.pullImages.count) * 0.1
@@ -111,7 +112,6 @@ public class ZLSwiftHeadView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-
 
         headLabel.center = CGPointMake(self.frame.size.width * 0.5, self.scrollView.frame.origin.y * 0.5)
         headImageView.frame = CGRectMake(headLabel.frame.origin.x - 50 - 10, -self.scrollView.frame.origin.y, 50, self.frame.size.height)
@@ -174,6 +174,10 @@ public class ZLSwiftHeadView: UIView {
                 self.headLabel.text = ZLSwithRefreshHeadViewText
             }
             refreshTempAction = self.action
+        }
+        
+        if (self.headImageView.isAnimating()){
+            self.headLabel.text = ZLSwithRefreshLoadingText
         }
         
         if (scrollViewContentOffsetY <= 0){
