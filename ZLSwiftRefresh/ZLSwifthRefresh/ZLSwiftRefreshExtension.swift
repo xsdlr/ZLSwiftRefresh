@@ -73,6 +73,7 @@ extension UIScrollView: UIScrollViewDelegate {
         if (status == .headerViewRefreshLoadingAnimation){
             self.headerRefreshView?.headImageView.animationImages = images
         }else{
+            self.headerRefreshView?.headImageView.image = images.first
             self.headerRefreshView?.pullImages = images
         }
         
