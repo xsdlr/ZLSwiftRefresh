@@ -58,10 +58,16 @@ public class ZLSwiftFootView: UIView {
         footLabel = footTitleLabel
     }
     
+    public override func willMoveToWindow(newWindow: UIWindow?) {
+        refreshStatus = .Normal
+    }
+    
     public override func willMoveToSuperview(newSuperview: UIView!) {
         
         superview?.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &KVOContext)
         superview?.removeObserver(self, forKeyPath: contentSizeKeyPath, context: &KVOContext)
+        
+        refreshStatus = .Normal
         if (newSuperview != nil && newSuperview.isKindOfClass(UIScrollView)) {
             self.scrollView = newSuperview as UIScrollView
             

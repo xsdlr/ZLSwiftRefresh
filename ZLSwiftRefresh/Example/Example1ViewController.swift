@@ -35,15 +35,15 @@ class Example1ViewController: UITableViewController {
         })
 
         // 及时上拉刷新
-        self.tableView.nowRefresh({ () -> Void in
-            weakSelf?.delay(2.0, closure: { () -> () in})
-            weakSelf?.delay(2.0, closure: { () -> () in
-                println("nowRefresh success")
-                weakSelf?.datas += 20
-                weakSelf?.tableView.reloadData()
-                weakSelf?.tableView.doneRefresh()
-            })
-        })
+//        self.tableView.nowRefresh({ () -> Void in
+//            weakSelf?.delay(2.0, closure: { () -> () in})
+//            weakSelf?.delay(2.0, closure: { () -> () in
+//                println("nowRefresh success")
+//                weakSelf?.datas += 20
+//                weakSelf?.tableView.reloadData()
+//                weakSelf?.tableView.doneRefresh()
+//            })
+//        })
 
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
