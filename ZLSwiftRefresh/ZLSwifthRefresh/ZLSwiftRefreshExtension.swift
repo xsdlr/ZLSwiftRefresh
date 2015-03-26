@@ -29,6 +29,13 @@ extension UIScrollView: UIScrollViewDelegate {
         }
     }
     
+    public var footerRefreshView: ZLSwiftFootView? {
+        get {
+            var footerRefreshView = viewWithTag(ZLSwiftFootViewTag)
+            return footerRefreshView as? ZLSwiftFootView
+        }
+    }
+    
     //MARK: Refresh
     //下拉刷新
     func toRefreshAction(action :(() -> Void)){
@@ -45,9 +52,11 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: LoadMore
     //上拉加载更多
     func toLoadMoreAction(action :(() -> Void)){
-        var footView = ZLSwiftFootView(action: action, frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
-        footView.tag = ZLSwiftFootViewTag
-        self.addSubview(footView)
+        if self.footerRefreshView == nil {
+            var footView = ZLSwiftFootView(action: action, frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
+            footView.tag = ZLSwiftFootViewTag
+            self.addSubview(footView)
+        }
     }
     
     //MARK: nowRefresh
