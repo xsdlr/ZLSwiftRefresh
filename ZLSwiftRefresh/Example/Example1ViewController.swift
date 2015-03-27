@@ -11,8 +11,8 @@ import UIKit
 class Example1ViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
     
     // default datas
-    var datas:Int = 0
-    var tableView:UITableView?
+    var datas:Int = 10
+    var tableView:UITableView = UITableView()
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,6 +31,7 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
         tableView.delegate = self
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(tableView)
+        self.tableView = tableView
         
         // 及时上拉刷新
         tableView.nowRefresh({ () -> Void in
@@ -38,8 +39,8 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
                 weakSelf?.datas += 10
-                tableView.reloadData()
-                tableView.doneRefresh()
+                weakSelf?.tableView.reloadData()
+                weakSelf?.tableView.doneRefresh()
             })
         })
         

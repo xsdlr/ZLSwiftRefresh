@@ -9,6 +9,8 @@
 import UIKit
 
 var KVOContext = ""
+let imageViewW:CGFloat = 50
+let labelTextW:CGFloat = 150
 
 public class ZLSwiftHeadView: UIView {
     private var headLabel: UILabel = UILabel()
@@ -81,7 +83,7 @@ public class ZLSwiftHeadView: UIView {
         if (!self.customAnimation){
             var results:[AnyObject] = []
             for i in 1..<4{
-                if let image = UIImage(named: "dropdown_loading_0\(i).png") {
+                if let image = UIImage(named: "dropdown_loading_0\(i)") {
                     results.append(image)
                 }
             }
@@ -112,10 +114,11 @@ public class ZLSwiftHeadView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-
-        headLabel.center = CGPointMake(self.frame.size.width * 0.5, self.scrollView.frame.origin.y * 0.5)
-        headImageView.frame = CGRectMake(headLabel.frame.origin.x - 50 - 10, -self.scrollView.frame.origin.y, 50, self.frame.size.height)
-        headLabel.frame = CGRectMake((self.frame.size.width - 150) / 2, headImageView.frame.origin.y, 150, self.frame.size.height)
+        
+        headLabel.sizeToFit()
+        headLabel.frame = CGRectMake((self.frame.size.width - labelTextW) / 2, -self.scrollView.frame.origin.y, labelTextW, self.frame.size.height)
+        
+        headImageView.frame = CGRectMake(headLabel.frame.origin.x - imageViewW - 5, headLabel.frame.origin.y, imageViewW, self.frame.size.height)
     }
     
     public override func willMoveToSuperview(newSuperview: UIView!) {
