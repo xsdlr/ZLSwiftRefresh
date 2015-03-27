@@ -94,16 +94,14 @@ public class ZLSwiftFootView: UIView {
                 self.frame.origin.y = height
             }else{
                 if (self.scrollView.contentSize.height == 0){
-                    self.removeFromSuperview()
+                    self.frame.origin.y = 0
                 }else if(scrollView.contentSize.height < self.frame.size.height){
                     self.frame.origin.y = self.scrollView.frame.size.height - self.frame.height
                 }else{
                     self.frame.origin.y = scrollView.contentSize.height
                 }
             }
-            
             self.frame.origin.y += ZLSwithRefreshFootViewHeight * 0.5
-
             return;
         }
 

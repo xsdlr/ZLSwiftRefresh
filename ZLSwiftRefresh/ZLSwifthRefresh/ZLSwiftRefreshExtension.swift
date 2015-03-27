@@ -16,6 +16,7 @@ enum HeaderViewRefreshAnimationStatus{
     case headerViewRefreshPullAnimation, headerViewRefreshLoadingAnimation
 }
 
+var loadMoreAction: (() -> ()) = {}
 var refreshStatus:RefreshStatus = .Normal
 let animations:CGFloat = 60.0
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
@@ -52,8 +53,19 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: LoadMore
     //上拉加载更多
     func toLoadMoreAction(action :(() -> Void)){
+        if (refreshStatus == .LoadMore){
+            refreshStatus = .Normal
+        }
+        
+        self.addLoadMoreView(action)
+    }
+    
+    func addLoadMoreView(action :(() -> Void)){
+        self.alwaysBounceVertical = true
+        loadMoreAction = action
         if self.footerRefreshView == nil {
             var footView = ZLSwiftFootView(action: action, frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
+            footView.scrollView = self
             footView.tag = ZLSwiftFootViewTag
             self.addSubview(footView)
         }
@@ -102,6 +114,10 @@ extension UIScrollView: UIScrollViewDelegate {
             headerView.stopAnimation()
         }
         refreshStatus = .Normal
+        
+        if (loadMoreAction != nil){
+            toLoadMoreAction(loadMoreAction)
+        }
     }
     
 }

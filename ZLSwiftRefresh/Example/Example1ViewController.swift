@@ -8,10 +8,11 @@
 
 import UIKit
 
-class Example1ViewController: UITableViewController {
+class Example1ViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
     
     // default datas
-    var datas:Int = 10
+    var datas:Int = 0
+    var tableView:UITableView?
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -22,30 +23,37 @@ class Example1ViewController: UITableViewController {
         
         weak var weakSelf = self as Example1ViewController
         
+        self.view.backgroundColor = UIColor.whiteColor()
+        
         // 上啦加载更多
-        self.tableView.toLoadMoreAction({ () -> () in
+        var tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .Plain)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.view.addSubview(tableView)
+        
+        // 及时上拉刷新
+        tableView.nowRefresh({ () -> Void in
+            weakSelf?.delay(2.0, closure: { () -> () in})
+            weakSelf?.delay(2.0, closure: { () -> () in
+                println("nowRefresh success")
+                weakSelf?.datas += 10
+                tableView.reloadData()
+                tableView.doneRefresh()
+            })
+        })
+        
+        tableView.toLoadMoreAction({ () -> Void in
             println("toLoadMoreAction success")
             if (weakSelf?.datas < 60){
                 weakSelf?.datas += 20
-                weakSelf?.tableView.reloadData()
-                weakSelf?.tableView.doneRefresh()
+                tableView.reloadData()
+                tableView.doneRefresh()
             }else{
-                weakSelf?.tableView.endLoadMoreData()
+                tableView.endLoadMoreData()
             }
         })
 
-        // 及时上拉刷新
-//        self.tableView.nowRefresh({ () -> Void in
-//            weakSelf?.delay(2.0, closure: { () -> () in})
-//            weakSelf?.delay(2.0, closure: { () -> () in
-//                println("nowRefresh success")
-//                weakSelf?.datas += 20
-//                weakSelf?.tableView.reloadData()
-//                weakSelf?.tableView.doneRefresh()
-//            })
-//        })
-
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     override func didReceiveMemoryWarning() {
@@ -53,11 +61,11 @@ class Example1ViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.datas;
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell
 
         if cell != nil {
@@ -69,7 +77,7 @@ class Example1ViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.navigationController?.pushViewController(Example1ViewController(), animated: true)
     }
     
