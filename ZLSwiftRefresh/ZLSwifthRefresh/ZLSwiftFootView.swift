@@ -71,7 +71,15 @@ public class ZLSwiftFootView: UIView {
         if (newSuperview != nil && newSuperview.isKindOfClass(UIScrollView)) {
             self.scrollView = newSuperview as UIScrollView
             
-            self.scrollView.contentInset = UIEdgeInsetsMake(self.scrollView.contentInset.top, self.scrollView.contentInset.left, self.scrollView.contentInset.bottom + self.frame.height + self.frame.height * 0.5 + self.scrollView.frame.origin.y, self.scrollView.contentInset.right)
+            // 如果UITableViewController情况下，contentInset.bottom 会加20
+            var offset:CGFloat = 0
+            if (!self.getViewControllerWithView(self.scrollView).isKindOfClass(UITableViewController)){
+                offset = self.frame.height * 0.5
+            }else{
+                offset = self.frame.height * 0.5 - 20
+            }
+            
+            self.scrollView.contentInset = UIEdgeInsetsMake(self.scrollView.contentInset.top, self.scrollView.contentInset.left, self.scrollView.contentInset.bottom + self.frame.height + offset + self.scrollView.frame.origin.y, self.scrollView.contentInset.right)
             
             newSuperview.addObserver(self, forKeyPath: contentOffsetKeyPath, options: .Initial, context: &KVOContext)
             newSuperview.addObserver(self, forKeyPath: contentSizeKeyPath, options: .Initial, context: &KVOContext)
@@ -80,7 +88,7 @@ public class ZLSwiftFootView: UIView {
     
     //MARK: KVO methods
     public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<()>) {
-        
+
         if (self.loadMoreAction == nil) {
             return;
         }
@@ -151,5 +159,16 @@ public class ZLSwiftFootView: UIView {
         }else if (isEndLoadMore == false){
             self.title = ZLSwithRefreshFootViewText
         }
+    }
+    
+    func getViewControllerWithView(vcView:UIView) -> AnyObject{
+        if( (vcView.nextResponder()?.isKindOfClass(UIViewController) ) == true){
+            return vcView.nextResponder() as UIViewController
+        }
+        
+        if(vcView.superview == nil){
+            return vcView
+        }
+        return self.getViewControllerWithView(vcView.superview!)
     }
 }

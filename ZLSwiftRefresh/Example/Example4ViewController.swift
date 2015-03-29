@@ -45,29 +45,29 @@ class Example4ViewController: UITableViewController {
             })
         })
         
-        var animationImages = [UIImage]()
-        for i in 0..<73{
-            var str = "PullToRefresh_00\(i)"
-            if (i > 9){
-                str = "PullToRefresh_0\(i)"
-            }
-            var image = UIImage(named: str)
-            animationImages.append(image!)
-        }
-        // 上拉动画
-        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshPullAnimation, images: animationImages)
-        
-        // 加载动画
-        var loadAnimationImages = [UIImage]()
-        for i in 73..<141{
-            var str = "PullToRefresh_0\(i)"
-            if (i > 99){
-                str = "PullToRefresh_\(i)"
-            }
-            var image = UIImage(named: str)
-            loadAnimationImages.append(image!)
-        }
-        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshLoadingAnimation, images: loadAnimationImages)
+//        var animationImages = [UIImage]()
+//        for i in 0..<73{
+//            var str = "PullToRefresh_00\(i)"
+//            if (i > 9){
+//                str = "PullToRefresh_0\(i)"
+//            }
+//            var image = UIImage(named: str)
+//            animationImages.append(image!)
+//        }
+//        // 上拉动画
+//        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshPullAnimation, images: animationImages)
+//        
+//        // 加载动画
+//        var loadAnimationImages = [UIImage]()
+//        for i in 73..<141{
+//            var str = "PullToRefresh_0\(i)"
+//            if (i > 99){
+//                str = "PullToRefresh_\(i)"
+//            }
+//            var image = UIImage(named: str)
+//            loadAnimationImages.append(image!)
+//        }
+//        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshLoadingAnimation, images: loadAnimationImages)
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }

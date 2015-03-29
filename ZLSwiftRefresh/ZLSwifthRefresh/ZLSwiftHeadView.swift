@@ -232,7 +232,6 @@ public class ZLSwiftHeadView: UIView {
         if(vcView.superview == nil){
             return vcView
         }
-        
         return self.getViewControllerWithView(vcView.superview!)
     }
 
