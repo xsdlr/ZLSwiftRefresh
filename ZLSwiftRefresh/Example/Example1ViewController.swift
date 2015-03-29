@@ -25,7 +25,6 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
         
         self.view.backgroundColor = UIColor.whiteColor()
         
-        // 上啦加载更多
         var tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .Plain)
         tableView.dataSource = self
         tableView.delegate = self
@@ -44,6 +43,7 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
             })
         })
         
+        // 上啦加载更多
         tableView.toLoadMoreAction({ () -> Void in
             println("toLoadMoreAction success")
             if (weakSelf?.datas < 60){

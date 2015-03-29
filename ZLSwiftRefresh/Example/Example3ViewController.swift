@@ -20,6 +20,7 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         self.view.backgroundColor = UIColor.whiteColor()
         self.webView.backgroundColor = UIColor.whiteColor()
         
+        // 立马进去就刷新
         self.webView.scrollView.nowRefresh({
             if self.webView.loading == false{
                 self.webView.reload()
