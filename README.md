@@ -2,7 +2,7 @@
 
 #### Default Support Refresh (默认支持的动画)
 ![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo1.gif)
-![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo5.gif)
+![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo6.gif)
 
 #### UITableView Refresh
 ![image](https://github.com/MakeZL/ZLSwiftRefresh/blob/master/refreshDemo2.gif)
