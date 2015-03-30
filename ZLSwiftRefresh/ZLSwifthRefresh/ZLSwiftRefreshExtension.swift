@@ -13,7 +13,7 @@ enum RefreshStatus{
 }
 
 enum HeaderViewRefreshAnimationStatus{
-    case headerViewRefreshPullAnimation, headerViewRefreshLoadingAnimation
+    case headerViewRefreshPullAnimation, headerViewRefreshLoadingAnimation, headerViewRefreshArrowAnimation
 }
 
 var loadMoreAction: (() -> ()) = {}
@@ -74,13 +74,14 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: nowRefresh
     //立马上拉刷新
     func nowRefresh(action :(() -> Void)){
-        
         self.alwaysBounceVertical = true
         if self.headerRefreshView == nil {
             var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: action,frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
             headView.scrollView = self
             headView.tag = ZLSwiftHeadViewTag
             self.addSubview(headView)
+        }else{
+            self.headerRefreshView?.action = action
         }
         
         self.headerRefreshView?.nowLoading = true
@@ -88,8 +89,19 @@ extension UIScrollView: UIScrollViewDelegate {
     }
 
     func headerViewRefreshAnimationStatus(status:HeaderViewRefreshAnimationStatus, images:[UIImage]){
+        // 箭头动画是自带的效果
+        if self.headerRefreshView == nil {
+            var headView:ZLSwiftHeadView = ZLSwiftHeadView(action: {},frame: CGRectMake(0, -ZLSwithRefreshHeadViewHeight, self.frame.size.width, ZLSwithRefreshHeadViewHeight))
+            headView.scrollView = self
+            headView.tag = ZLSwiftHeadViewTag
+            self.addSubview(headView)
+        }
         
-        self.headerRefreshView?.customAnimation = true
+        if (status != .headerViewRefreshArrowAnimation){
+            self.headerRefreshView?.customAnimation = true
+        }
+        
+        self.headerRefreshView?.animationStatus = status
         
         if (status == .headerViewRefreshLoadingAnimation){
             self.headerRefreshView?.headImageView.animationImages = images

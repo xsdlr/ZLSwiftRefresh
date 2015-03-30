@@ -18,6 +18,8 @@ public class ZLSwiftHeadView: UIView {
     var scrollView:UIScrollView = UIScrollView()
     var customAnimation:Bool = false
     var pullImages:[UIImage] = [UIImage]()
+    var animationStatus:HeaderViewRefreshAnimationStatus?
+    var activityView: UIActivityIndicatorView?
     
     var nowLoading:Bool = false{
         willSet {
@@ -28,7 +30,7 @@ public class ZLSwiftHeadView: UIView {
         }
     }
     
-    private var action: (() -> ()) = {}
+    var action: (() -> ()) = {}
     var nowAction: (() -> ()) = {}    
     private var refreshTempAction:(() -> Void) = {}
     
@@ -51,7 +53,13 @@ public class ZLSwiftHeadView: UIView {
     var imgName:String {
         set {
             if(!self.customAnimation){
-                self.headImageView.image = UIImage(named: "dropdown_anim__000\(newValue)")
+                // 默认动画
+                if (self.animationStatus != .headerViewRefreshArrowAnimation){
+                    self.headImageView.image = UIImage(named: "dropdown_anim__000\(newValue)")
+                }else{
+                    // 箭头动画
+                    self.headImageView.image = UIImage(named: "arrow")
+                }
             }else{
                 var image = self.pullImages[newValue.toInt()!]
                 self.headImageView.image = image
@@ -77,39 +85,51 @@ public class ZLSwiftHeadView: UIView {
         headLabel.clipsToBounds = true;
         self.addSubview(headLabel)
         self.headLabel = headLabel
+        
+        var activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        self.addSubview(activityView)
+        self.activityView = activityView
     }
 
     func startAnimation(){
         if (!self.customAnimation){
-            var results:[AnyObject] = []
-            for i in 1..<4{
-                if let image = UIImage(named: "dropdown_loading_0\(i)") {
-                    results.append(image)
+            if (self.animationStatus != .headerViewRefreshArrowAnimation){
+                var results:[AnyObject] = []
+                for i in 1..<4{
+                    if let image = UIImage(named: "dropdown_loading_0\(i)") {
+                        results.append(image)
+                    }
                 }
+                self.headImageView.animationImages = results as [AnyObject]?
+                self.headImageView.animationDuration = 0.6
+            }else{
+                self.headImageView.hidden = true
+                self.activityView?.startAnimating()
             }
-            self.headImageView.animationImages = results as [AnyObject]?
+        }else{
+            var duration:Double = Double(self.pullImages.count) * 0.1
+            self.headImageView.animationDuration = duration
         }
         
         self.headLabel.text = ZLSwithRefreshLoadingText
-        
-        if (self.customAnimation){
-            var duration:Double = Double(self.pullImages.count) * 0.1
-            self.headImageView.animationDuration = duration
-        }else{
-            self.headImageView.animationDuration = 0.6
+        if (self.animationStatus != .headerViewRefreshArrowAnimation){
+            self.headImageView.animationRepeatCount = 0
+            self.headImageView.startAnimating()
         }
-        self.headImageView.animationRepeatCount = 0
-        self.headImageView.startAnimating()
     }
     
     func stopAnimation(){
-        
         self.headLabel.text = ZLSwithRefreshHeadViewText
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
         })
         
-        self.headImageView.stopAnimating()
+        if (self.animationStatus == .headerViewRefreshArrowAnimation){
+            self.activityView?.stopAnimating()
+            self.headImageView.hidden = false
+        }else{
+            self.headImageView.stopAnimating()
+        }
     }
     
     public override func layoutSubviews() {
@@ -119,6 +139,7 @@ public class ZLSwiftHeadView: UIView {
         headLabel.frame = CGRectMake((self.frame.size.width - labelTextW) / 2, -self.scrollView.frame.origin.y, labelTextW, self.frame.size.height)
         
         headImageView.frame = CGRectMake(headLabel.frame.origin.x - imageViewW - 5, headLabel.frame.origin.y, imageViewW, self.frame.size.height)
+        self.activityView?.frame = headImageView.frame
     }
     
     public override func willMoveToSuperview(newSuperview: UIView!) {
@@ -145,6 +166,13 @@ public class ZLSwiftHeadView: UIView {
         }
         
         if (scrollViewContentOffsetY + self.getNavigationHeight() != 0 && scrollViewContentOffsetY <= -height - scrollView.contentInset.top + 20) {
+            
+            if (self.animationStatus == .headerViewRefreshArrowAnimation){
+                UIView.animateWithDuration(0.15, animations: { () -> Void in
+                    self.headImageView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                })
+            }
+            
             // 上拉刷新
             self.headLabel.text = ZLSwithRefreshRecoderText
             if scrollView.dragging == false && self.headImageView.isAnimating() == false{
@@ -176,6 +204,13 @@ public class ZLSwiftHeadView: UIView {
             if (!self.headImageView.isAnimating()){
                 self.headLabel.text = ZLSwithRefreshHeadViewText
             }
+            
+            if (self.animationStatus == .headerViewRefreshArrowAnimation){
+                UIView.animateWithDuration(0.15, animations: { () -> Void in
+                    self.headImageView.transform = CGAffineTransformIdentity
+                })
+            }
+            
             refreshTempAction = self.action
         }
         
@@ -188,7 +223,6 @@ public class ZLSwiftHeadView: UIView {
             if ((!self.customAnimation) && (v < -animations || v > animations)){
                 v = animations
             }
-            
             
             if (self.customAnimation){
                 v *= CGFloat(CGFloat(self.pullImages.count) / ZLSwithRefreshHeadViewHeight)

@@ -33,7 +33,8 @@ class ViewController: UITableViewController {
         "TableView Refresh Example ->",
         "CollectionView Refresh Example ->",
         "WebView Refresh Example ->",
-        "自定义动画 -> "
+        "自定义动画 -> ",
+        "箭头动画刷新 -> "
     ]
     
     override func viewDidLoad() {
@@ -76,6 +77,11 @@ class ViewController: UITableViewController {
             var example4Vc = Example4ViewController()
             example4Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example4Vc as UIViewController, animated: true)
+        }else if indexPath.row == 4{
+            // webView
+            var example5Vc = Example5ViewController()
+            example5Vc.title = self.datas[indexPath.row] as? String
+            self.navigationController?.pushViewController(example5Vc as UIViewController, animated: true)
         }
     }
 }
