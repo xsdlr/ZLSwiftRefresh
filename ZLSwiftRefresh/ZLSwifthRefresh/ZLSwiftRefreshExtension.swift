@@ -115,7 +115,7 @@ extension UIScrollView: UIScrollViewDelegate {
     //MARK: endLoadMoreData
     //数据加载完毕
     func endLoadMoreData() {
-        var footView:ZLSwiftFootView = self.viewWithTag(ZLSwiftFootViewTag) as ZLSwiftFootView
+        var footView:ZLSwiftFootView = self.viewWithTag(ZLSwiftFootViewTag) as! ZLSwiftFootView
         footView.isEndLoadMore = true
     }
     

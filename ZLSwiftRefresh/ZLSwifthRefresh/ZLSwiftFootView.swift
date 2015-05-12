@@ -69,7 +69,7 @@ public class ZLSwiftFootView: UIView {
         
         refreshStatus = .Normal
         if (newSuperview != nil && newSuperview.isKindOfClass(UIScrollView)) {
-            self.scrollView = newSuperview as UIScrollView
+            self.scrollView = newSuperview as! UIScrollView
             
             // 如果UITableViewController情况下，contentInset.bottom 会加20
             var offset:CGFloat = 0
@@ -97,7 +97,7 @@ public class ZLSwiftFootView: UIView {
         if (keyPath == contentSizeKeyPath){
             // change contentSize
             if(scrollView.isKindOfClass(UICollectionView) == true){
-                let tempCollectionView :UICollectionView = scrollView as UICollectionView
+                let tempCollectionView :UICollectionView = scrollView as! UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 self.frame.origin.y = height
             }else{
@@ -130,7 +130,7 @@ public class ZLSwiftFootView: UIView {
             
             if (scrollView.isKindOfClass(UICollectionView))
             {
-                let tempCollectionView :UICollectionView = scrollView as UICollectionView
+                let tempCollectionView :UICollectionView = scrollView as! UICollectionView
                 var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 tableViewMaxHeight = height
             }else if(scrollView.contentSize.height > 0){
@@ -163,7 +163,7 @@ public class ZLSwiftFootView: UIView {
     
     func getViewControllerWithView(vcView:UIView) -> AnyObject{
         if( (vcView.nextResponder()?.isKindOfClass(UIViewController) ) == true){
-            return vcView.nextResponder() as UIViewController
+            return vcView.nextResponder() as! UIViewController
         }
         
         if(vcView.superview == nil){
