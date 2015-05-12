@@ -82,7 +82,7 @@ class Example4ViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
         
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")

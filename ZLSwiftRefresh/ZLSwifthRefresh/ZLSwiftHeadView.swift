@@ -145,7 +145,7 @@ public class ZLSwiftHeadView: UIView {
     public override func willMoveToSuperview(newSuperview: UIView!) {
         superview?.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &KVOContext)
         if (newSuperview != nil && newSuperview.isKindOfClass(UIScrollView)) {
-            self.scrollView = newSuperview as UIScrollView
+            self.scrollView = newSuperview as! UIScrollView
             newSuperview.addObserver(self, forKeyPath: contentOffsetKeyPath, options: .Initial, context: &KVOContext)
         }
     }
@@ -242,7 +242,7 @@ public class ZLSwiftHeadView: UIView {
     func getNavigationHeight() -> CGFloat{
         var vc = UIViewController()
         if self.getViewControllerWithView(self).isKindOfClass(UIViewController) == true {
-            vc = self.getViewControllerWithView(self) as UIViewController
+            vc = self.getViewControllerWithView(self) as! UIViewController
         }
         
         var top = vc.navigationController?.navigationBar.frame.height
@@ -260,7 +260,7 @@ public class ZLSwiftHeadView: UIView {
     
     func getViewControllerWithView(vcView:UIView) -> AnyObject{
         if( (vcView.nextResponder()?.isKindOfClass(UIViewController) ) == true){
-            return vcView.nextResponder() as UIViewController
+            return vcView.nextResponder() as! UIViewController
         }
         
         if(vcView.superview == nil){
