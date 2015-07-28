@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		4807E2D91AB1C3AB00C6EC4C /* Example3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4807E2D81AB1C3AB00C6EC4C /* Example3ViewController.swift */; };
 		4811689D1AC8F785002D2AE2 /* Example5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4811689C1AC8F785002D2AE2 /* Example5ViewController.swift */; };
+		48A825F61AF9AA600010BAC8 /* ZLSwiftConstDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A825F21AF9AA600010BAC8 /* ZLSwiftConstDefine.swift */; };
+		48A825F71AF9AA600010BAC8 /* ZLSwiftFootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A825F31AF9AA600010BAC8 /* ZLSwiftFootView.swift */; };
+		48A825F81AF9AA600010BAC8 /* ZLSwiftHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A825F41AF9AA600010BAC8 /* ZLSwiftHeadView.swift */; };
+		48A825F91AF9AA600010BAC8 /* ZLSwiftRefreshExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A825F51AF9AA600010BAC8 /* ZLSwiftRefreshExtension.swift */; };
 		48D3E2531AAD7BE7000F4239 /* Example1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D3E2521AAD7BE7000F4239 /* Example1ViewController.swift */; };
 		48D3E2551AADEA7F000F4239 /* Example2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D3E2541AADEA7F000F4239 /* Example2ViewController.swift */; };
 		48DB63AD1AC0005F00D39B1A /* Example4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DB63AC1AC0005F00D39B1A /* Example4ViewController.swift */; };
@@ -18,10 +22,6 @@
 		48FD58CF1AA95BC6007F7CE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48FD58CE1AA95BC6007F7CE8 /* Images.xcassets */; };
 		48FD58D21AA95BC6007F7CE8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48FD58D01AA95BC6007F7CE8 /* LaunchScreen.xib */; };
 		48FD58DE1AA95BC6007F7CE8 /* ZLSwiftRefreshTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58DD1AA95BC6007F7CE8 /* ZLSwiftRefreshTests.swift */; };
-		48FD58F41AA9A495007F7CE8 /* ZLSwiftConstDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58F01AA9A495007F7CE8 /* ZLSwiftConstDefine.swift */; };
-		48FD58F51AA9A495007F7CE8 /* ZLSwiftFootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58F11AA9A495007F7CE8 /* ZLSwiftFootView.swift */; };
-		48FD58F61AA9A495007F7CE8 /* ZLSwiftHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58F21AA9A495007F7CE8 /* ZLSwiftHeadView.swift */; };
-		48FD58F71AA9A495007F7CE8 /* ZLSwiftRefreshExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FD58F31AA9A495007F7CE8 /* ZLSwiftRefreshExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +37,10 @@
 /* Begin PBXFileReference section */
 		4807E2D81AB1C3AB00C6EC4C /* Example3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example3ViewController.swift; sourceTree = "<group>"; };
 		4811689C1AC8F785002D2AE2 /* Example5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example5ViewController.swift; sourceTree = "<group>"; };
+		48A825F21AF9AA600010BAC8 /* ZLSwiftConstDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftConstDefine.swift; sourceTree = "<group>"; };
+		48A825F31AF9AA600010BAC8 /* ZLSwiftFootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftFootView.swift; sourceTree = "<group>"; };
+		48A825F41AF9AA600010BAC8 /* ZLSwiftHeadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftHeadView.swift; sourceTree = "<group>"; };
+		48A825F51AF9AA600010BAC8 /* ZLSwiftRefreshExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftRefreshExtension.swift; sourceTree = "<group>"; };
 		48D3E2521AAD7BE7000F4239 /* Example1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example1ViewController.swift; sourceTree = "<group>"; };
 		48D3E2541AADEA7F000F4239 /* Example2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example2ViewController.swift; sourceTree = "<group>"; };
 		48DB63AC1AC0005F00D39B1A /* Example4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example4ViewController.swift; sourceTree = "<group>"; };
@@ -50,10 +54,6 @@
 		48FD58D71AA95BC6007F7CE8 /* ZLSwiftRefreshTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZLSwiftRefreshTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		48FD58DC1AA95BC6007F7CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		48FD58DD1AA95BC6007F7CE8 /* ZLSwiftRefreshTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLSwiftRefreshTests.swift; sourceTree = "<group>"; };
-		48FD58F01AA9A495007F7CE8 /* ZLSwiftConstDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftConstDefine.swift; sourceTree = "<group>"; };
-		48FD58F11AA9A495007F7CE8 /* ZLSwiftFootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftFootView.swift; sourceTree = "<group>"; };
-		48FD58F21AA9A495007F7CE8 /* ZLSwiftHeadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftHeadView.swift; sourceTree = "<group>"; };
-		48FD58F31AA9A495007F7CE8 /* ZLSwiftRefreshExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZLSwiftRefreshExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +74,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		48A825F11AF9AA600010BAC8 /* ZLSwifthRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				48A825F21AF9AA600010BAC8 /* ZLSwiftConstDefine.swift */,
+				48A825F31AF9AA600010BAC8 /* ZLSwiftFootView.swift */,
+				48A825F41AF9AA600010BAC8 /* ZLSwiftHeadView.swift */,
+				48A825F51AF9AA600010BAC8 /* ZLSwiftRefreshExtension.swift */,
+			);
+			name = ZLSwifthRefresh;
+			path = ../../ZLSwifthRefresh;
+			sourceTree = "<group>";
+		};
 		48D3E2511AAD7BC8000F4239 /* Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,8 +119,8 @@
 		48FD58C41AA95BC6007F7CE8 /* ZLSwiftRefresh */ = {
 			isa = PBXGroup;
 			children = (
+				48A825F11AF9AA600010BAC8 /* ZLSwifthRefresh */,
 				48D3E2511AAD7BC8000F4239 /* Example */,
-				48FD58EF1AA9A495007F7CE8 /* ZLSwifthRefresh */,
 				48FD58C71AA95BC6007F7CE8 /* AppDelegate.swift */,
 				48FD58C91AA95BC6007F7CE8 /* ViewController.swift */,
 				48FD58CB1AA95BC6007F7CE8 /* Main.storyboard */,
@@ -142,17 +154,6 @@
 				48FD58DC1AA95BC6007F7CE8 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		48FD58EF1AA9A495007F7CE8 /* ZLSwifthRefresh */ = {
-			isa = PBXGroup;
-			children = (
-				48FD58F01AA9A495007F7CE8 /* ZLSwiftConstDefine.swift */,
-				48FD58F11AA9A495007F7CE8 /* ZLSwiftFootView.swift */,
-				48FD58F21AA9A495007F7CE8 /* ZLSwiftHeadView.swift */,
-				48FD58F31AA9A495007F7CE8 /* ZLSwiftRefreshExtension.swift */,
-			);
-			path = ZLSwifthRefresh;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,17 +256,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48FD58F41AA9A495007F7CE8 /* ZLSwiftConstDefine.swift in Sources */,
+				48A825F61AF9AA600010BAC8 /* ZLSwiftConstDefine.swift in Sources */,
 				4807E2D91AB1C3AB00C6EC4C /* Example3ViewController.swift in Sources */,
-				48FD58F61AA9A495007F7CE8 /* ZLSwiftHeadView.swift in Sources */,
 				48FD58CA1AA95BC6007F7CE8 /* ViewController.swift in Sources */,
-				48FD58F51AA9A495007F7CE8 /* ZLSwiftFootView.swift in Sources */,
 				48D3E2551AADEA7F000F4239 /* Example2ViewController.swift in Sources */,
+				48A825F71AF9AA600010BAC8 /* ZLSwiftFootView.swift in Sources */,
 				48D3E2531AAD7BE7000F4239 /* Example1ViewController.swift in Sources */,
+				48A825F81AF9AA600010BAC8 /* ZLSwiftHeadView.swift in Sources */,
 				4811689D1AC8F785002D2AE2 /* Example5ViewController.swift in Sources */,
+				48A825F91AF9AA600010BAC8 /* ZLSwiftRefreshExtension.swift in Sources */,
 				48FD58C81AA95BC6007F7CE8 /* AppDelegate.swift in Sources */,
 				48DB63AD1AC0005F00D39B1A /* Example4ViewController.swift in Sources */,
-				48FD58F71AA9A495007F7CE8 /* ZLSwiftRefreshExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

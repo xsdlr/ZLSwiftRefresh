@@ -1,14 +1,14 @@
 //
-//  Example4ViewController.swift
+//  Example5ViewController.swift
 //  ZLSwiftRefresh
 //
-//  Created by 张磊 on 15-3-23.
+//  Created by 张磊 on 15-3-30.
 //  Copyright (c) 2015年 com.zixue101.www. All rights reserved.
 //
 
 import UIKit
 
-class Example4ViewController: UITableViewController {
+class Example5ViewController: UITableViewController {
     
     // default datas
     var datas:Int = 10
@@ -20,7 +20,11 @@ class Example4ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        weak var weakSelf = self as Example4ViewController
+        weak var weakSelf = self as Example5ViewController
+        
+        
+        // 上拉动画
+        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshArrowAnimation, images: [])
         
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
@@ -44,31 +48,6 @@ class Example4ViewController: UITableViewController {
                 weakSelf?.tableView.doneRefresh()
             })
         })
-        
-        var animationImages = [UIImage]()
-        for i in 0..<73{
-            var str = "PullToRefresh_00\(i)"
-            if (i > 9){
-                str = "PullToRefresh_0\(i)"
-            }
-            var image = UIImage(named: str)
-            animationImages.append(image!)
-        }
-        // 上拉动画
-        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshPullAnimation, images: animationImages)
-        
-        // 加载动画
-        var loadAnimationImages = [UIImage]()
-        for i in 73..<141{
-            var str = "PullToRefresh_0\(i)"
-            if (i > 99){
-                str = "PullToRefresh_\(i)"
-            }
-            var image = UIImage(named: str)
-            loadAnimationImages.append(image!)
-        }
-        self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshLoadingAnimation, images: loadAnimationImages)
-        
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
@@ -82,7 +61,7 @@ class Example4ViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
         
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")

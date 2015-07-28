@@ -76,7 +76,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var collectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as UICollectionViewCell
+        var collectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! UICollectionViewCell
 
         collectionViewCell.backgroundColor = UIColor(red: CGFloat(CGFloat(arc4random_uniform(256))/255), green: CGFloat(CGFloat(arc4random_uniform(256))/255), blue: CGFloat(CGFloat(arc4random_uniform(256))/255.0), alpha: 1)
         

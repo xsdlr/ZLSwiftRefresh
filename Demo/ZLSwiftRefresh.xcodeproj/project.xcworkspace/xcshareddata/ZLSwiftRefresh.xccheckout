@@ -14,11 +14,11 @@
 		<string>https://github.com/MakeZL/ZLSwiftRefresh.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ZLSwiftRefresh.xcodeproj</string>
+	<string>Demo/ZLSwiftRefresh.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>AF665359059C6876C2A4A24D54A2630D02FE8CD8</key>
-		<string>../..</string>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/MakeZL/ZLSwiftRefresh.git</string>

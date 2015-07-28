@@ -72,9 +72,8 @@ public class ZLSwiftHeadView: UIView {
     }
     
     func setupUI(){
-        
         var headImageView:UIImageView = UIImageView(frame: CGRectZero)
-        headImageView.contentMode = .Center
+        headImageView.contentMode = .ScaleAspectFit
         headImageView.clipsToBounds = true;
         self.addSubview(headImageView)
         self.headImageView = headImageView
@@ -145,7 +144,7 @@ public class ZLSwiftHeadView: UIView {
     public override func willMoveToSuperview(newSuperview: UIView!) {
         superview?.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &KVOContext)
         if (newSuperview != nil && newSuperview.isKindOfClass(UIScrollView)) {
-            self.scrollView = newSuperview as UIScrollView
+            self.scrollView = newSuperview as! UIScrollView
             newSuperview.addObserver(self, forKeyPath: contentOffsetKeyPath, options: .Initial, context: &KVOContext)
         }
     }
@@ -201,8 +200,8 @@ public class ZLSwiftHeadView: UIView {
             
         }else{
             // 上拉刷新
-            if (!self.headImageView.isAnimating()){
-                self.headLabel.text = ZLSwithRefreshHeadViewText
+            if (self.activityView?.isAnimating() == false){
+                self.headLabel.text = ZLSwithRefreshLoadingText
             }
             
             if (self.animationStatus == .headerViewRefreshArrowAnimation){
@@ -214,7 +213,7 @@ public class ZLSwiftHeadView: UIView {
             refreshTempAction = self.action
         }
         
-        if (self.headImageView.isAnimating()){
+        if (self.activityView?.isAnimating() == true){
             self.headLabel.text = ZLSwithRefreshLoadingText
         }
         
@@ -242,7 +241,7 @@ public class ZLSwiftHeadView: UIView {
     func getNavigationHeight() -> CGFloat{
         var vc = UIViewController()
         if self.getViewControllerWithView(self).isKindOfClass(UIViewController) == true {
-            vc = self.getViewControllerWithView(self) as UIViewController
+            vc = self.getViewControllerWithView(self) as! UIViewController
         }
         
         var top = vc.navigationController?.navigationBar.frame.height
@@ -260,7 +259,7 @@ public class ZLSwiftHeadView: UIView {
     
     func getViewControllerWithView(vcView:UIView) -> AnyObject{
         if( (vcView.nextResponder()?.isKindOfClass(UIViewController) ) == true){
-            return vcView.nextResponder() as UIViewController
+            return vcView.nextResponder() as! UIViewController
         }
         
         if(vcView.superview == nil){
