@@ -121,7 +121,7 @@ public class ZLSwiftHeadView: UIView {
         self.nowLoading = false
         self.headLabel.text = ZLSwithRefreshHeadViewText
         UIView.animateWithDuration(0.25, animations: { () -> Void in
-            if (abs(self.scrollView.contentOffset.y) >= self.getNavigationHeight() * 2){
+            if (abs(self.scrollView.contentOffset.y) >= self.getNavigationHeight() + ZLSwithRefreshHeadViewHeight){
                 self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
             }else{
                 self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight() + self.scrollView.contentOffset.y, 0, self.scrollView.contentInset.bottom, 0)
