@@ -31,10 +31,10 @@ public class ZLSwiftHeadView: UIView {
     }
     
     var action: (() -> ()) = {}
-    var nowAction: (() -> ()) = {}    
+    var nowAction: (() -> ()) = {}
     private var refreshTempAction:(() -> Void) = {}
     
-
+    
     convenience init(action :(() -> ()), frame: CGRect) {
         self.init(frame: frame)
         self.action = action
@@ -73,7 +73,7 @@ public class ZLSwiftHeadView: UIView {
     
     func setupUI(){
         var headImageView:UIImageView = UIImageView(frame: CGRectZero)
-        headImageView.contentMode = .ScaleAspectFit
+        headImageView.contentMode = .Center
         headImageView.clipsToBounds = true;
         self.addSubview(headImageView)
         self.headImageView = headImageView
@@ -89,7 +89,7 @@ public class ZLSwiftHeadView: UIView {
         self.addSubview(activityView)
         self.activityView = activityView
     }
-
+    
     func startAnimation(){
         if (!self.customAnimation){
             if (self.animationStatus != .headerViewRefreshArrowAnimation){
@@ -118,9 +118,14 @@ public class ZLSwiftHeadView: UIView {
     }
     
     func stopAnimation(){
+        self.nowLoading = false
         self.headLabel.text = ZLSwithRefreshHeadViewText
         UIView.animateWithDuration(0.25, animations: { () -> Void in
-            self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
+            if (abs(self.scrollView.contentOffset.y) >= self.getNavigationHeight() * 2){
+                self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
+            }else{
+                self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight() + self.scrollView.contentOffset.y, 0, self.scrollView.contentInset.bottom, 0)
+            }
         })
         
         if (self.animationStatus == .headerViewRefreshArrowAnimation){
@@ -148,7 +153,7 @@ public class ZLSwiftHeadView: UIView {
             newSuperview.addObserver(self, forKeyPath: contentOffsetKeyPath, options: .Initial, context: &KVOContext)
         }
     }
-        
+    
     //MARK: KVO methods
     public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<()>) {
         
@@ -200,8 +205,10 @@ public class ZLSwiftHeadView: UIView {
             
         }else{
             // 上拉刷新
-            if (self.activityView?.isAnimating() == false){
+            if (nowLoading == true){
                 self.headLabel.text = ZLSwithRefreshLoadingText
+            }else if(scrollView.dragging == true){
+                self.headLabel.text = ZLSwithRefreshHeadViewText
             }
             
             if (self.animationStatus == .headerViewRefreshArrowAnimation){
@@ -213,10 +220,10 @@ public class ZLSwiftHeadView: UIView {
             refreshTempAction = self.action
         }
         
-        if (self.activityView?.isAnimating() == true){
+        // 上拉刷新
+        if (nowLoading == true){
             self.headLabel.text = ZLSwithRefreshLoadingText
         }
-        
         if (scrollViewContentOffsetY <= 0){
             var v:CGFloat = scrollViewContentOffsetY + scrollView.contentInset.top
             if ((!self.customAnimation) && (v < -animations || v > animations)){
@@ -267,7 +274,7 @@ public class ZLSwiftHeadView: UIView {
         }
         return self.getViewControllerWithView(vcView.superview!)
     }
-
+    
     
     deinit{
         var scrollView = superview as? UIScrollView
