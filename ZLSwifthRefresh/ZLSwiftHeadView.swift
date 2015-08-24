@@ -91,6 +91,11 @@ public class ZLSwiftHeadView: UIView {
     }
     
     func startAnimation(){
+        
+        if (self.activityView?.isAnimating() == true){
+            return ;
+        }
+        
         if (!self.customAnimation){
             if (self.animationStatus != .headerViewRefreshArrowAnimation){
                 var results:[AnyObject] = []
@@ -101,10 +106,12 @@ public class ZLSwiftHeadView: UIView {
                 }
                 self.headImageView.animationImages = results as [AnyObject]?
                 self.headImageView.animationDuration = 0.6
+                self.activityView?.alpha = 0.0
             }else{
+                self.activityView?.alpha = 1.0
                 self.headImageView.hidden = true
-                self.activityView?.startAnimating()
             }
+            self.activityView?.startAnimating()
         }else{
             var duration:Double = Double(self.pullImages.count) * 0.1
             self.headImageView.animationDuration = duration
@@ -124,16 +131,18 @@ public class ZLSwiftHeadView: UIView {
             if (abs(self.scrollView.contentOffset.y) >= self.getNavigationHeight() + ZLSwithRefreshHeadViewHeight){
                 self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
             }else{
-                self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight() + self.scrollView.contentOffset.y, 0, self.scrollView.contentInset.bottom, 0)
+                self.scrollView.contentInset = UIEdgeInsetsMake(self.getNavigationHeight(), 0, self.scrollView.contentInset.bottom, 0)
             }
         })
         
         if (self.animationStatus == .headerViewRefreshArrowAnimation){
-            self.activityView?.stopAnimating()
             self.headImageView.hidden = false
+            self.activityView?.alpha = 0.0
         }else{
+            self.activityView?.alpha = 1.0
             self.headImageView.stopAnimating()
         }
+        self.activityView?.stopAnimating()
     }
     
     public override func layoutSubviews() {
@@ -159,6 +168,10 @@ public class ZLSwiftHeadView: UIView {
         
         if (self.action == nil) {
             return;
+        }
+        
+        if (self.activityView?.isAnimating() == true){
+            return ;
         }
         
         var scrollView:UIScrollView = self.scrollView
