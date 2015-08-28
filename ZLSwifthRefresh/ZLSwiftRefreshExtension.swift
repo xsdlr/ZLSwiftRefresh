@@ -84,10 +84,10 @@ extension UIScrollView: UIScrollViewDelegate {
             self.headerRefreshView?.action = action
         }
         
-        self.headerRefreshView?.nowLoading = true
         self.headerRefreshView?.nowAction = action
+        self.headerRefreshView?.nowLoading = true
     }
-
+    
     func headerViewRefreshAnimationStatus(status:HeaderViewRefreshAnimationStatus, images:[UIImage]){
         // 箭头动画是自带的效果
         if self.headerRefreshView == nil {
@@ -127,9 +127,9 @@ extension UIScrollView: UIScrollViewDelegate {
         }
         refreshStatus = .Normal
         
-        if (loadMoreAction != nil){
-            toLoadMoreAction(loadMoreAction)
-        }
+        //        if (loadMoreAction != nil){
+        //            toLoadMoreAction(loadMoreAction)
+        //        }
     }
     
 }

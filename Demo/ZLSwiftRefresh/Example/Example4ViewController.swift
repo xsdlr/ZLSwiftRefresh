@@ -22,28 +22,6 @@ class Example4ViewController: UITableViewController {
         
         weak var weakSelf = self as Example4ViewController
         
-        // 上啦加载更多
-        self.tableView.toLoadMoreAction({ () -> () in
-            println("toLoadMoreAction success")
-            if (weakSelf?.datas < 60){
-                weakSelf?.datas += 20
-                weakSelf?.tableView.reloadData()
-                weakSelf?.tableView.doneRefresh()
-            }else{
-                weakSelf?.tableView.endLoadMoreData()
-            }
-        })
-        
-        // 及时上拉刷新
-        self.tableView.nowRefresh({ () -> Void in
-            weakSelf?.delay(2.0, closure: { () -> () in})
-            weakSelf?.delay(2.0, closure: { () -> () in
-                println("nowRefresh success")
-                weakSelf?.datas += 20
-                weakSelf?.tableView.reloadData()
-                weakSelf?.tableView.doneRefresh()
-            })
-        })
         
         var animationImages = [UIImage]()
         for i in 0..<73{
@@ -68,6 +46,30 @@ class Example4ViewController: UITableViewController {
             loadAnimationImages.append(image!)
         }
         self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshLoadingAnimation, images: loadAnimationImages)
+        
+        
+        // 上啦加载更多
+        self.tableView.toLoadMoreAction({ () -> () in
+            println("toLoadMoreAction success")
+            if (weakSelf?.datas < 60){
+                weakSelf?.datas += 20
+                weakSelf?.tableView.reloadData()
+                weakSelf?.tableView.doneRefresh()
+            }else{
+                weakSelf?.tableView.endLoadMoreData()
+            }
+        })
+        
+        // 及时上拉刷新
+        self.tableView.nowRefresh({ () -> Void in
+            weakSelf?.delay(2.0, closure: { () -> () in})
+            weakSelf?.delay(2.0, closure: { () -> () in
+                println("nowRefresh success")
+                weakSelf?.datas += 20
+                weakSelf?.tableView.reloadData()
+                weakSelf?.tableView.doneRefresh()
+            })
+        })
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
