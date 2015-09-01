@@ -19,6 +19,7 @@ enum HeaderViewRefreshAnimationStatus{
 var loadMoreAction: (() -> ()) = {}
 var refreshStatus:RefreshStatus = .Normal
 let animations:CGFloat = 60.0
+var isFooterViewHidden:Bool?
 var tableViewOriginContentInset:UIEdgeInsets = UIEdgeInsetsZero
 
 extension UIScrollView: UIScrollViewDelegate {
@@ -61,10 +62,12 @@ extension UIScrollView: UIScrollViewDelegate {
     }
     
     func showFooterView(){
+        isFooterViewHidden = false
         self.footerRefreshView?.hidden = false
     }
     
     func hiddenFooterView(){
+        isFooterViewHidden = true
         self.footerRefreshView?.hidden = true
     }
     
@@ -74,6 +77,7 @@ extension UIScrollView: UIScrollViewDelegate {
         if self.footerRefreshView == nil {
             var footView = ZLSwiftFootView(action: action, frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
             footView.scrollView = self
+            footView.hidden = isFooterViewHidden!
             footView.tag = ZLSwiftFootViewTag
             self.addSubview(footView)
         }

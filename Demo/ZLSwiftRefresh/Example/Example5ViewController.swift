@@ -25,6 +25,7 @@ class Example5ViewController: UITableViewController {
         // 上拉动画
         self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshArrowAnimation, images: [])
         
+        self.tableView.hiddenFooterView()
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
             println("toLoadMoreAction success")
@@ -36,7 +37,6 @@ class Example5ViewController: UITableViewController {
                 weakSelf?.tableView.endLoadMoreData()
             }
         })
-        self.tableView.hiddenFooterView()
         
         // 及时上拉刷新
         self.tableView.nowRefresh({ () -> Void in
