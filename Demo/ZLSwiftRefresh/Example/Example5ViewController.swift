@@ -11,7 +11,7 @@ import UIKit
 class Example5ViewController: UITableViewController {
     
     // default datas
-    var datas:Int = 10
+    var datas:Int = 0
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -21,7 +21,6 @@ class Example5ViewController: UITableViewController {
         super.viewDidLoad()
         
         weak var weakSelf = self as Example5ViewController
-        
         
         // 上拉动画
         self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshArrowAnimation, images: [])
@@ -37,6 +36,7 @@ class Example5ViewController: UITableViewController {
                 weakSelf?.tableView.endLoadMoreData()
             }
         })
+        self.tableView.hiddenFooterView()
         
         // 及时上拉刷新
         self.tableView.nowRefresh({ () -> Void in
@@ -44,6 +44,7 @@ class Example5ViewController: UITableViewController {
             weakSelf?.delay(2.0, closure: { () -> () in
                 println("nowRefresh success")
                 weakSelf?.datas += 20
+                self.tableView.showFooterView()
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
             })

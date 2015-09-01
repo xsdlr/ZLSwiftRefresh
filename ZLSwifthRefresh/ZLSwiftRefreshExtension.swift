@@ -60,6 +60,14 @@ extension UIScrollView: UIScrollViewDelegate {
         self.addLoadMoreView(action)
     }
     
+    func showFooterView(){
+        self.footerRefreshView?.hidden = false
+    }
+    
+    func hiddenFooterView(){
+        self.footerRefreshView?.hidden = true
+    }
+    
     func addLoadMoreView(action :(() -> Void)){
         self.alwaysBounceVertical = true
         loadMoreAction = action
