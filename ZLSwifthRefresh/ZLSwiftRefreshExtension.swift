@@ -77,7 +77,9 @@ extension UIScrollView: UIScrollViewDelegate {
         if self.footerRefreshView == nil {
             var footView = ZLSwiftFootView(action: action, frame: CGRectMake( 0 , UIScreen.mainScreen().bounds.size.height - ZLSwithRefreshFootViewHeight, self.frame.size.width, ZLSwithRefreshFootViewHeight))
             footView.scrollView = self
-            footView.hidden = isFooterViewHidden!
+            if (isFooterViewHidden != nil){
+                footView.hidden = isFooterViewHidden!
+            }
             footView.tag = ZLSwiftFootViewTag
             self.addSubview(footView)
         }
