@@ -55,10 +55,10 @@ public class ZLSwiftHeadView: UIView {
             if(!self.customAnimation){
                 // 默认动画
                 if (self.animationStatus != .headerViewRefreshArrowAnimation){
-                    self.headImageView.image = UIImage(named: "dropdown_anim__000\(newValue)")
+                    self.headImageView.image = self.imageBundleWithNamed(named: "dropdown_anim__000\(newValue)")
                 }else{
                     // 箭头动画
-                    self.headImageView.image = UIImage(named: "arrow")
+                    self.headImageView.image = self.imageBundleWithNamed(named: "arrow")
                 }
             }else{
                 var image = self.pullImages[newValue.toInt()!]
@@ -100,7 +100,8 @@ public class ZLSwiftHeadView: UIView {
             if (self.animationStatus != .headerViewRefreshArrowAnimation){
                 var results:[AnyObject] = []
                 for i in 1..<4{
-                    if let image = UIImage(named: "dropdown_loading_0\(i)") {
+                    var image:UIImage = self.imageBundleWithNamed(named: "dropdown_loading_0\(i)")
+                    if image.size.height > 0 && image.size.width > 0 {
                         results.append(image)
                     }
                 }
@@ -288,6 +289,9 @@ public class ZLSwiftHeadView: UIView {
         return self.getViewControllerWithView(vcView.superview!)
     }
     
+    func imageBundleWithNamed(#named: String!) -> UIImage{
+        return UIImage(named: ZLSwiftRefreshBundleName.stringByAppendingPathComponent(named))!
+    }
     
     deinit{
         var scrollView = superview as? UIScrollView
