@@ -29,7 +29,7 @@ class Example4ViewController: UITableViewController {
             if (i > 9){
                 str = "PullToRefresh_0\(i)"
             }
-            var image = UIImage(named: str)
+            let image = UIImage(named: str)
             animationImages.append(image!)
         }
         // 上拉动画
@@ -42,7 +42,7 @@ class Example4ViewController: UITableViewController {
             if (i > 99){
                 str = "PullToRefresh_\(i)"
             }
-            var image = UIImage(named: str)
+            let image = UIImage(named: str)
             loadAnimationImages.append(image!)
         }
         self.tableView.headerViewRefreshAnimationStatus(.headerViewRefreshLoadingAnimation, images: loadAnimationImages)
@@ -50,7 +50,7 @@ class Example4ViewController: UITableViewController {
         
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
-            println("toLoadMoreAction success")
+            print("toLoadMoreAction success")
             if (weakSelf?.datas < 60){
                 weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
@@ -64,7 +64,7 @@ class Example4ViewController: UITableViewController {
         self.tableView.nowRefresh({ () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
-                println("nowRefresh success")
+                print("nowRefresh success")
                 weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
@@ -84,7 +84,7 @@ class Example4ViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell")
         
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")

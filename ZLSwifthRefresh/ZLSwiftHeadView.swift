@@ -46,7 +46,7 @@ public class ZLSwiftHeadView: UIView {
         self.setupUI()
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -61,7 +61,7 @@ public class ZLSwiftHeadView: UIView {
                     self.headImageView.image = self.imageBundleWithNamed(named: "arrow")
                 }
             }else{
-                var image = self.pullImages[newValue.toInt()!]
+                let image = self.pullImages[Int(newValue)!]
                 self.headImageView.image = image
             }
         }
@@ -72,20 +72,20 @@ public class ZLSwiftHeadView: UIView {
     }
     
     func setupUI(){
-        var headImageView:UIImageView = UIImageView(frame: CGRectZero)
+        let headImageView:UIImageView = UIImageView(frame: CGRectZero)
         headImageView.contentMode = .Center
         headImageView.clipsToBounds = true;
         self.addSubview(headImageView)
         self.headImageView = headImageView
         
-        var headLabel:UILabel = UILabel(frame: self.frame)
+        let headLabel:UILabel = UILabel(frame: self.frame)
         headLabel.text = ZLSwithRefreshHeadViewText
         headLabel.textAlignment = .Center
         headLabel.clipsToBounds = true;
         self.addSubview(headLabel)
         self.headLabel = headLabel
         
-        var activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         self.addSubview(activityView)
         self.activityView = activityView
     }
@@ -100,12 +100,12 @@ public class ZLSwiftHeadView: UIView {
             if (self.animationStatus != .headerViewRefreshArrowAnimation){
                 var results:[AnyObject] = []
                 for i in 1..<4{
-                    var image:UIImage = self.imageBundleWithNamed(named: "dropdown_loading_0\(i)")
+                    let image:UIImage = self.imageBundleWithNamed(named: "dropdown_loading_0\(i)")
                     if image.size.height > 0 && image.size.width > 0 {
                         results.append(image)
                     }
                 }
-                self.headImageView.animationImages = results as [AnyObject]?
+                self.headImageView.animationImages = results as? [UIImage]
                 self.headImageView.animationDuration = 0.6
                 self.activityView?.alpha = 0.0
             }else{
@@ -114,7 +114,7 @@ public class ZLSwiftHeadView: UIView {
             }
             self.activityView?.startAnimating()
         }else{
-            var duration:Double = Double(self.pullImages.count) * 0.1
+            let duration:Double = Double(self.pullImages.count) * 0.1
             self.headImageView.animationDuration = duration
         }
         
@@ -165,7 +165,7 @@ public class ZLSwiftHeadView: UIView {
     }
     
     //MARK: KVO methods
-    public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<()>) {
+    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<()>) {
         
         if (self.action == nil) {
             return;
@@ -175,9 +175,9 @@ public class ZLSwiftHeadView: UIView {
             return ;
         }
         
-        var scrollView:UIScrollView = self.scrollView
+        let scrollView:UIScrollView = self.scrollView
         // change contentOffset
-        var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
+        let scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
         var height = ZLSwithRefreshHeadViewHeight
         if (ZLSwithRefreshHeadViewHeight > animations){
             height = animations
@@ -289,12 +289,12 @@ public class ZLSwiftHeadView: UIView {
         return self.getViewControllerWithView(vcView.superview!)
     }
     
-    func imageBundleWithNamed(#named: String!) -> UIImage{
-        return UIImage(named: ZLSwiftRefreshBundleName.stringByAppendingPathComponent(named))!
+    func imageBundleWithNamed(named named: String!) -> UIImage{
+        return UIImage(named: ZLSwiftRefreshBundleName.stringByAppendingFormat("/%@",named))!
     }
     
     deinit{
-        var scrollView = superview as? UIScrollView
+        let scrollView = superview as? UIScrollView
         scrollView?.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &KVOContext)
     }
 }

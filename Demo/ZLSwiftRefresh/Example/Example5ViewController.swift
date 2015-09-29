@@ -28,7 +28,7 @@ class Example5ViewController: UITableViewController {
         self.tableView.hiddenFooterView()
         // 上啦加载更多
         self.tableView.toLoadMoreAction({ () -> () in
-            println("toLoadMoreAction success")
+            print("toLoadMoreAction success")
             if (weakSelf?.datas < 60){
                 weakSelf?.datas += 20
                 weakSelf?.tableView.reloadData()
@@ -42,7 +42,7 @@ class Example5ViewController: UITableViewController {
         self.tableView.nowRefresh({ () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
-                println("nowRefresh success")
+                print("nowRefresh success")
                 weakSelf?.datas += 20
                 self.tableView.showFooterView()
                 weakSelf?.tableView.reloadData()
@@ -62,7 +62,7 @@ class Example5ViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell")
         
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")

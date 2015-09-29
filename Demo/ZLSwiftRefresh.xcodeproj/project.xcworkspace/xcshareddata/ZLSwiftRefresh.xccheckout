@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>3AE55A06-53A5-4A64-9C28-280E447E4AB8</string>
 	<key>IDESourceControlProjectName</key>
-	<string>ZLSwiftRefresh</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>AF665359059C6876C2A4A24D54A2630D02FE8CD8</key>
 		<string>https://github.com/MakeZL/ZLSwiftRefresh.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Demo/ZLSwiftRefresh.xcodeproj</string>
+	<string>Demo/ZLSwiftRefresh.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>AF665359059C6876C2A4A24D54A2630D02FE8CD8</key>
