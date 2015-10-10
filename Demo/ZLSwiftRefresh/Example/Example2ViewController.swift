@@ -26,7 +26,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         collectionView.toLoadMoreAction { () -> () in
             weakSelf?.delay(0.5, closure: { () -> () in})
             weakSelf?.delay(0.5, closure: { () -> () in
-                print("toLoadMoreAction success")
+                println("toLoadMoreAction success")
                 if weakSelf?.datas < 40 {
                     weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
                     weakSelf?.collectionView.reloadData()
@@ -42,7 +42,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
         collectionView.nowRefresh({ () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
-                print("nowRefresh success")
+                println("nowRefresh success")
                 weakSelf?.datas += (Int)(arc4random_uniform(10)) + 1
                 weakSelf?.collectionView.reloadData()
                 weakSelf?.collectionView.doneRefresh()
@@ -51,13 +51,13 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     }
     
     func setupUI(){
-        let flowLayout = UICollectionViewFlowLayout()
+        var flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 10
         flowLayout.minimumInteritemSpacing = 10
         flowLayout.itemSize = CGSizeMake(80, 80)
         flowLayout.scrollDirection = .Vertical
         
-        let collectionView = UICollectionView(frame: CGRectMake(20, 20, self.view.frame.width - 40, self.view.frame.height), collectionViewLayout: flowLayout)
+        var collectionView = UICollectionView(frame: CGRectMake(20, 20, self.view.frame.width - 40, self.view.frame.height), collectionViewLayout: flowLayout)
         collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.dataSource = self as UICollectionViewDataSource
         collectionView.delegate = self as UICollectionViewDelegate
@@ -76,7 +76,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let collectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) 
+        var collectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! UICollectionViewCell
 
         collectionViewCell.backgroundColor = UIColor(red: CGFloat(CGFloat(arc4random_uniform(256))/255), green: CGFloat(CGFloat(arc4random_uniform(256))/255), blue: CGFloat(CGFloat(arc4random_uniform(256))/255.0), alpha: 1)
         
@@ -85,7 +85,7 @@ class Example2ViewController: UIViewController,UICollectionViewDelegate,UICollec
     
     //MARK: <UICollectionViewDelegate>
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        print("点击了\(indexPath.item)行")
+        println("点击了\(indexPath.item)行")
     }
     
     func delay(delay:Double, closure:()->()) {

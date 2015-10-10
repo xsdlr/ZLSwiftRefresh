@@ -25,7 +25,7 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
         
         self.view.backgroundColor = UIColor.whiteColor()
         
-        let tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .Plain)
+        var tableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height), style: .Plain)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -36,7 +36,7 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
         tableView.nowRefresh({ () -> Void in
             weakSelf?.delay(2.0, closure: { () -> () in})
             weakSelf?.delay(2.0, closure: { () -> () in
-                print("nowRefresh success")
+                println("nowRefresh success")
                 weakSelf?.datas += 10
                 weakSelf?.tableView.reloadData()
                 weakSelf?.tableView.doneRefresh()
@@ -45,7 +45,7 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
         
         // 上啦加载更多
         tableView.toLoadMoreAction({ () -> Void in
-            print("toLoadMoreAction success")
+            println("toLoadMoreAction success")
             if (weakSelf?.datas < 60){
                 weakSelf?.datas += 20
                 tableView.reloadData()
@@ -67,7 +67,7 @@ class Example1ViewController: UIViewController,UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell")
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
 
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")

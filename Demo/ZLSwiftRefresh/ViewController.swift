@@ -46,7 +46,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell")
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
         if cell != nil {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }
@@ -59,27 +59,27 @@ class ViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0 {
             // TableView
-            let example1Vc = Example1ViewController()
+            var example1Vc = Example1ViewController()
             example1Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example1Vc as UIViewController, animated: true)
         }else if indexPath.row == 1{
             // collectionView
-            let example2Vc = Example2ViewController()
+            var example2Vc = Example2ViewController()
             example2Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example2Vc as UIViewController, animated: true)
         }else if indexPath.row == 2{
             // webView
-            let example3Vc = Example3ViewController()
+            var example3Vc = Example3ViewController()
             example3Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example3Vc as UIViewController, animated: true)
         }else if indexPath.row == 3{
             // webView
-            let example4Vc = Example4ViewController()
+            var example4Vc = Example4ViewController()
             example4Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example4Vc as UIViewController, animated: true)
         }else if indexPath.row == 4{
             // webView
-            let example5Vc = Example5ViewController()
+            var example5Vc = Example5ViewController()
             example5Vc.title = self.datas[indexPath.row] as? String
             self.navigationController?.pushViewController(example5Vc as UIViewController, animated: true)
         }

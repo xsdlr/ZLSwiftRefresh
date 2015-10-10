@@ -35,7 +35,7 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
     }
     
     func setupUI(){
-        let webView = UIWebView(frame: self.view.frame)
+        var webView = UIWebView(frame: self.view.frame)
         webView.delegate = self
         self.view.addSubview(webView)
         webView.loadRequest(NSURLRequest(URL: NSURL(string: "http://weibo.com/makezl")!, cachePolicy: .ReturnCacheDataElseLoad, timeoutInterval: 10))
@@ -47,8 +47,8 @@ class Example3ViewController: UIViewController,UIWebViewDelegate {
         self.webView.scrollView.doneRefresh()
     }
     
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-        print("网络有问题..")
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+        println("网络有问题..")
         self.webView.scrollView.doneRefresh()
     }
     

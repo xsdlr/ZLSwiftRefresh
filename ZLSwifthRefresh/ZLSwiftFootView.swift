@@ -44,13 +44,13 @@ public class ZLSwiftFootView: UIView {
         self.setupUI()
     }
     
-    public required init?(coder aDecoder: NSCoder) {
+    public required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         // Currently it is not supported to load view from nib
     }
     
     func setupUI(){
-        let footTitleLabel:UILabel = UILabel(frame: CGRectMake(0, 0, self.frame.size.width, self.frame.size.height))
+        var footTitleLabel:UILabel = UILabel(frame: CGRectMake(0, 0, self.frame.size.width, self.frame.size.height))
         footTitleLabel.textAlignment = .Center
         footTitleLabel.text = ZLSwithRefreshFootViewText
         self.addSubview(footTitleLabel)
@@ -86,18 +86,18 @@ public class ZLSwiftFootView: UIView {
     }
     
     //MARK: KVO methods
-    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<()>) {
+    public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<()>) {
 
         if (self.loadMoreAction == nil) {
             return;
         }
         
-        let scrollView:UIScrollView = self.scrollView
+        var scrollView:UIScrollView = self.scrollView
         if (keyPath == contentSizeKeyPath){
             // change contentSize
             if(scrollView.isKindOfClass(UICollectionView) == true){
                 let tempCollectionView :UICollectionView = scrollView as! UICollectionView
-                let height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 self.frame.origin.y = height
             }else{
                 if (self.scrollView.contentSize.height == 0){
@@ -113,7 +113,7 @@ public class ZLSwiftFootView: UIView {
         }
 
         // change contentOffset
-        let scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
+        var scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
         var height = ZLSwithRefreshHeadViewHeight
         if (ZLSwithRefreshHeadViewHeight > animations){
             height = animations
@@ -124,13 +124,13 @@ public class ZLSwiftFootView: UIView {
             scrollViewContentOffsetY > 0
             )
         {
-            let nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.scrollView.frame.size.height
+            var nowContentOffsetY:CGFloat = scrollViewContentOffsetY + self.scrollView.frame.size.height
             var tableViewMaxHeight:CGFloat = 0
             
             if (scrollView.isKindOfClass(UICollectionView))
             {
                 let tempCollectionView :UICollectionView = scrollView as! UICollectionView
-                let height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
+                var height = tempCollectionView.collectionViewLayout.collectionViewContentSize().height
                 tableViewMaxHeight = height
             }else if(scrollView.contentSize.height > 0){
                 tableViewMaxHeight = scrollView.contentSize.height
