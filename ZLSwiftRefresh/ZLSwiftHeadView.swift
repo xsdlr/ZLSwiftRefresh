@@ -290,9 +290,9 @@ public class ZLSwiftHeadView: UIView {
     }
     
     func imageBundleWithNamed(named named: String!) -> UIImage{
+        let bundle = NSBundle(identifier: "xsdlr.ZLSwiftRefresh")
         let name = ZLSwiftRefreshBundleName.stringByAppendingFormat("/%@", named)
-        print(name)
-        return UIImage(named: name)!
+        return UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: nil)!
     }
     
     deinit{

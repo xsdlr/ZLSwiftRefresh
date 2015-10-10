@@ -19,7 +19,6 @@
 		CD30E03E1BC8CEE60042F0B6 /* Example3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30E0391BC8CEE60042F0B6 /* Example3ViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		CD30E03F1BC8CEE60042F0B6 /* Example4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30E03A1BC8CEE60042F0B6 /* Example4ViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		CD30E0401BC8CEE60042F0B6 /* Example5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD30E03B1BC8CEE60042F0B6 /* Example5ViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		CD30E0641BC8D5E90042F0B6 /* ZLSwiftRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CD30E0631BC8D5E90042F0B6 /* ZLSwiftRefresh.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +72,6 @@
 		CD30E03A1BC8CEE60042F0B6 /* Example4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example4ViewController.swift; sourceTree = "<group>"; };
 		CD30E03B1BC8CEE60042F0B6 /* Example5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Example5ViewController.swift; sourceTree = "<group>"; };
 		CD30E0581BC8D34A0042F0B6 /* ZLSwiftRefresh.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZLSwiftRefresh.xcodeproj; path = ../ZLSwiftRefresh.xcodeproj; sourceTree = "<group>"; };
-		CD30E0631BC8D5E90042F0B6 /* ZLSwiftRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ZLSwiftRefresh.bundle; path = ../ZLSwiftRefresh/ZLSwiftRefresh.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,7 +102,6 @@
 		CD30DFF31BC8CE030042F0B6 = {
 			isa = PBXGroup;
 			children = (
-				CD30E0631BC8D5E90042F0B6 /* ZLSwiftRefresh.bundle */,
 				CD30E0581BC8D34A0042F0B6 /* ZLSwiftRefresh.xcodeproj */,
 				CD30DFFE1BC8CE030042F0B6 /* Example */,
 				CD30E0131BC8CE030042F0B6 /* ExampleTests */,
@@ -305,7 +302,6 @@
 				CD30E00A1BC8CE030042F0B6 /* LaunchScreen.storyboard in Resources */,
 				CD30E0071BC8CE030042F0B6 /* Assets.xcassets in Resources */,
 				CD30E0051BC8CE030042F0B6 /* Main.storyboard in Resources */,
-				CD30E0641BC8D5E90042F0B6 /* ZLSwiftRefresh.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
