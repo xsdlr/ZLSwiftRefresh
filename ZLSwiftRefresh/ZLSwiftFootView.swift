@@ -13,9 +13,9 @@ public class ZLSwiftFootView: UIView {
     var scrollView:UIScrollView = UIScrollView()
     var footLabel: UILabel = UILabel()
     
-    var loadMoreAction: (() -> Void) = {}
-    var loadMoreTempAction:(() -> Void) = {}
-    var loadMoreEndTempAction:(() -> Void) = {}
+    var loadMoreAction: (() -> Void)? = {}
+    var loadMoreTempAction:(() -> Void)? = {}
+    var loadMoreEndTempAction:(() -> Void)? = {}
     
     var isEndLoadMore:Bool = false{
         willSet{
@@ -145,7 +145,7 @@ public class ZLSwiftFootView: UIView {
                     if loadMoreTempAction != nil{
                         refreshStatus = .LoadMore
                         self.title = ZLSwithRefreshLoadingText
-                        loadMoreTempAction()
+                        loadMoreTempAction?()
                         loadMoreTempAction = {}
                     }else {
                         self.title = ZLSwithRefreshMessageText
