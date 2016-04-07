@@ -114,10 +114,10 @@ public class ZLSwiftFootView: UIView {
 
         // change contentOffset
         let scrollViewContentOffsetY:CGFloat = scrollView.contentOffset.y
-        var height = ZLSwithRefreshHeadViewHeight
-        if (ZLSwithRefreshHeadViewHeight > animations){
-            height = animations
-        }
+//        var height = ZLSwithRefreshHeadViewHeight
+//        if (ZLSwithRefreshHeadViewHeight > animations){
+//            height = animations
+//        }
         
         // 上拉加载更多
         if (
